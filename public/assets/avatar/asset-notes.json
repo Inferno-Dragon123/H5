@@ -1,0 +1,20 @@
+{
+  "dimensions": [
+    576,
+    995
+  ],
+  "sourceCrop": [
+    500,
+    140,
+    1548,
+    1950
+  ],
+  "layers": [
+    "base",
+    "suit",
+    "hair"
+  ],
+  "hairTexture": "normalized luminance + source alpha; tinted at runtime",
+  "originalAssetsPreserved": true,
+  "alignment": "all layers preserve the shared source canvas center; no per-layer offsets"
+}
