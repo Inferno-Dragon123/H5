@@ -8,6 +8,8 @@ import { places, modes, sources } from './data/world'
 import { questions } from './data/questions'
 import { soundEnabled, toggleSound, sfx, speak, setScene } from './audio'
 
+const emit=defineEmits(['return-bank'])
+
 const STORAGE='star-city-preview-v1'
 const defaults={name:'星城探索者',avatar:{gender:'female',hair:0,suit:0,color:'#754b32'},mode:'city',points:0,completed:[],correct:[],mistakes:[],checkins:[],redeemed:[],daily:'',diary:'',ticket:false,likes:[]}
 let saved={}
@@ -99,7 +101,7 @@ onUnmounted(()=>{window.removeEventListener('hashchange',onHash);window.removeEv
    <div class="sidebar-bottom"><span class="icbc-symbol">工</span><div><b>工银星启</b><small>第十七届「工行杯」参赛作品</small></div></div>
   </aside>
   <div class="workspace">
-   <header class="topbar"><div class="breadcrumb"><span class="desktop-only">智游镜界 <span class="crumb-slash">/</span></span><b>{{nav.find(n=>n.id===page)?.name||'我的探索'}}</b><span class="preview-badge">体验预览版</span></div><div class="header-actions"><span class="location"><I name="MapPin" :size="15"/>中国 · 长沙</span><button class="icon-button" :aria-label="soundEnabled?'关闭音乐':'开启音乐'" :title="soundEnabled?'关闭音乐':'开启纯音乐'" @click="audioToggle"><I :name="soundEnabled?'Volume2':'VolumeX'"/></button><button class="icon-button bell" aria-label="查看消息" @click="openModal('messages')"><I name="Bell"/><i/></button><button class="user-chip" @click="go('profile')"><span class="user-face"><AvatarFigure :model-value="state.avatar" compact /></span><span class="desktop-only">{{state.name}}</span><I name="ChevronRight" :size="14"/></button></div></header>
+   <header class="topbar"><div class="breadcrumb"><button class="bank-return-button icon-button" aria-label="返回工银首页" title="返回工银首页" @click="emit('return-bank')"><I name="ChevronLeft" :size="20"/></button><span class="desktop-only">智游镜界 <span class="crumb-slash">/</span></span><b>{{nav.find(n=>n.id===page)?.name||'我的探索'}}</b><span class="preview-badge">体验预览版</span></div><div class="header-actions"><span class="location"><I name="MapPin" :size="15"/>中国 · 长沙</span><button class="icon-button" :aria-label="soundEnabled?'关闭音乐':'开启音乐'" :title="soundEnabled?'关闭音乐':'开启纯音乐'" @click="audioToggle"><I :name="soundEnabled?'Volume2':'VolumeX'"/></button><button class="icon-button bell" aria-label="查看消息" @click="openModal('messages')"><I name="Bell"/><i/></button><button class="user-chip" @click="go('profile')"><span class="user-face"><AvatarFigure :model-value="state.avatar" compact /></span><span class="desktop-only">{{state.name}}</span><I name="ChevronRight" :size="14"/></button></div></header>
 
    <main v-if="lesson.active" class="lesson-page page-enter">
     <button class="back-link" @click="leaveLesson"><I name="ChevronLeft" :size="18"/>{{lesson.practice?'返回反诈课堂':'返回城市地图'}}</button>

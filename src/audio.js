@@ -1,6 +1,7 @@
 import { ref } from 'vue'
 export const soundEnabled=ref(false)
 let bgm=null, voice=null, scene='explore'
+export function pauseAudio(){bgm?.pause();voice?.pause()}
 export function setScene(value){
  const changed=scene!==value
  scene=value
