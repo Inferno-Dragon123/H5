@@ -6,7 +6,7 @@ import AvatarStudio from './components/AvatarStudio.vue'
 import VisualNovel from './components/VisualNovel.vue'
 import { places, modes, sources } from './data/world'
 import { questions } from './data/questions'
-import { soundEnabled, toggleSound, sfx, speak, setScene } from './audio'
+import { soundEnabled, toggleSound, sfx, speak, setScene, pauseAudio } from './audio'
 
 const emit=defineEmits(['return-bank'])
 
@@ -44,12 +44,12 @@ watch(state,()=>{try{localStorage.setItem(STORAGE,JSON.stringify(state))}catch{n
 watch(page,p=>{setScene('explore');if(p==='avatar')speak('avatar')})
 watch(modal,async value=>{if(value){restoreFocus=document.activeElement;await nextTick();dialogEl.value?.focus()}else restoreFocus?.focus?.()})
 function notify(message){toast.value=message;clearTimeout(toastTimer);toastTimer=setTimeout(()=>toast.value='',3200)}
-function go(id){if(!validPages.includes(id))return;lesson.active=false;modal.value='';page.value=id;location.hash=id;sfx('transition');window.scrollTo({top:0,behavior:'instant'})}
-function onHash(){const p=location.hash.slice(1);if(validPages.includes(p)){page.value=p;lesson.active=false;modal.value='';setScene('explore')}}
+function go(id){if(!validPages.includes(id))return;if(lesson.active)pauseAudio();lesson.active=false;modal.value='';page.value=id;location.hash=id;setScene('explore');sfx('transition');window.scrollTo({top:0,behavior:'instant'})}
+function onHash(){const p=location.hash.slice(1);if(validPages.includes(p)){if(lesson.active)pauseAudio();page.value=p;lesson.active=false;modal.value='';setScene('explore')}}
 function openModal(id){if(id==='diary')shareText.value=state.diary||'';modal.value=id;sfx('click')}
 function chooseMode(mode){state.mode=mode;selected.value=activePlace.value;scale.value=1;go('map')}
 function inspectPlace(place){selected.value=place;sfx('click');if(window.innerWidth<=640)nextTick(()=>document.querySelector('.selected-place-card')?.scrollIntoView({behavior:'smooth',block:'start'}))}
-function openStory(place){novelKey.value++;selected.value=place;lesson.active=true;lesson.phase='story';lesson.place=place;lesson.list=questions.filter(q=>q.place===(place.id==='pozi'?'chaozong':place.id)).slice(0,3);setScene('story');sfx('click');speak('alert');window.scrollTo({top:0,behavior:'instant'})}
+function openStory(place){pauseAudio();novelKey.value++;selected.value=place;lesson.active=true;lesson.phase='story';lesson.place=place;lesson.list=questions.filter(q=>q.place===(place.id==='pozi'?'chaozong':place.id)).slice(0,3);setScene('story');sfx('click');speak('alert');window.scrollTo({top:0,behavior:'instant'})}
 function beginQuiz(){Object.assign(lesson,{phase:'quiz',index:0,selected:null,submitted:false,score:0,gained:0,passed:false,newComplete:false});setScene('quiz');window.scrollTo({top:0,behavior:'instant'})}
 function submitAnswer(){
  if(lesson.selected===null||lesson.submitted)return
@@ -65,7 +65,7 @@ function nextQuestion(){
  if(lesson.passed&&!state.completed.includes(lesson.place.id)){state.completed.push(lesson.place.id);state.points+=20;lesson.gained+=20;lesson.newComplete=true;sfx('unlock')}
  setScene(lesson.passed?'victory':'explore')
 }
-function leaveLesson(){lesson.active=false;setScene('explore');go('map')}
+function leaveLesson(){go('map')}
 function resumeNovel(){lesson.phase='epilogue'}
 function continueNovel(){const next=nextStoryPlace.value;if(next)openStory(next);else leaveLesson()}
 function claimDaily(){if(state.daily===today()){notify('今天已签到，明天再来领取。');return}state.daily=today();state.points+=10;sfx('points');notify('今日签到成功，+10 体验 i豆！')}
