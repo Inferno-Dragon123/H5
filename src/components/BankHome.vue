@@ -2,6 +2,7 @@
 import { computed, nextTick, onBeforeUnmount, ref } from 'vue'
 import { ArrowUpRight, Bell, Bookmark, CalendarDays, Check, ChevronLeft, ChevronRight, Gem, Headphones, Home, MapPin, MessageSquare, ScanLine, Search, ShieldCheck, ShoppingBag, Smile, Sparkles, X } from 'lucide-vue-next'
 import './bank-home.css'
+import BankLogo from './BankLogo.vue'
 
 const emit = defineEmits(['enter-project'])
 const props = defineProps({ points: { type: Number, default: 0 } })
@@ -17,10 +18,10 @@ let suppressBannerClickUntil = 0
 let featureTrigger = null
 
 const primaryServices = [
-  { name: '支付', crop: [77, 313, 176, 156], caption: '付款、收款，便捷随行', description: '日常支付服务，随时随地轻松享生活。' },
-  { name: '账单', crop: [332, 313, 176, 156], caption: '每一笔，都心中有数', description: '清晰记录收支，让生活更有规划。' },
-  { name: '银行卡', crop: [582, 313, 176, 156], caption: '你的随身金融管家', description: '查看卡片、管理账户，一站掌握。' },
-  { name: '权益', crop: [837, 313, 176, 156], caption: '美好生活，更多惊喜', description: '发现工银星启，开启城市探索与专属权益。' },
+  { name: '支付', icon: 'payment', caption: '付款、收款，便捷随行', description: '日常支付服务，随时随地轻松享生活。' },
+  { name: '账单', icon: 'bill', caption: '每一笔，都心中有数', description: '清晰记录收支，让生活更有规划。' },
+  { name: '银行卡', icon: 'card', caption: '你的随身金融管家', description: '查看卡片、管理账户，一站掌握。' },
+  { name: '权益', icon: 'benefits', caption: '美好生活，更多惊喜', description: '发现工银星启，开启城市探索与专属权益。' },
 ]
 const services = [
   { name: '爱购优惠', crop: [82, 979, 134, 128] },
@@ -122,7 +123,7 @@ onBeforeUnmount(() => clearTimeout(toastTimer))
       <header class="bank-header">
         <div class="bank-brand-line">
           <div class="bank-brand" aria-label="中国工商银行">
-            <svg class="bank-icbc-mark" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="20" fill="none" stroke="currentColor" stroke-width="4"/><path d="M14 15h20v5H23v8h11v5H14v-5h4v-8h-4z" fill="currentColor"/></svg>
+            <BankLogo class="bank-icbc-mark" aria-hidden="true" />
             <span><b>中国工商银行</b><small>INDUSTRIAL AND COMMERCIAL BANK OF CHINA</small></span>
           </div>
           <span class="bank-demo-label">参赛场景演示</span>
@@ -143,7 +144,7 @@ onBeforeUnmount(() => clearTimeout(toastTimer))
       </header>
 
       <section class="bank-primary-services" aria-label="常用金融服务">
-        <button v-for="service in primaryServices" :key="service.name" @click="openFeature(service.name)"><span class="bank-sprite bank-primary-sprite" :style="spriteStyle(service.crop)" aria-hidden="true"/><span>{{ service.name }}</span></button>
+        <button v-for="service in primaryServices" :key="service.name" @click="openFeature(service.name)"><img class="bank-primary-icon" :src="`/assets/bank/primary-${service.icon}-v2.png`" alt=""/><span>{{ service.name }}</span></button>
       </section>
 
       <section v-if="query.trim()" class="bank-search-results" aria-label="搜索结果">
