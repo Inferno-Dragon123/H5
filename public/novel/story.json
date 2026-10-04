@@ -1,0 +1,3642 @@
+{
+  "version": "2026-10-05-proposal-scene-draft",
+  "title": "工银星启·智游镜界 · 场景演出脚本",
+  "scope": "按原企划书逐事件还原，保留原话并修正明显错字；原稿只有梗概的事件补充短对白。答题前与通关后严格分离。",
+  "schema": {
+    "beforeQuiz": "按 whenModes 过滤后的顺序执行；最后 quiz beat 触发已有的 3 题挑战。",
+    "afterPass": "只在答题通过后执行；保留 App 既有首通发奖判定，脚本自身不加积分。",
+    "afterFail": "答题未通过后执行，不播放净化/核销/胜利演出；最后 retry 回到挑战。",
+    "cast": "每条 beat 是完整舞台角色快照。不同角色左右同屏，已有角色位置保持；发言角色高亮。用 expression 淡变，用 motion 仅在指定事件触发。",
+    "scene": "sceneId 变化触发背景、场景标题和转场。相同场景对白不重复触发入场或语音。",
+    "choice": "情境选择有即时反馈，不替代正式答题，不重复发积分；危险选项仅显示模拟反馈，不执行网络/支付/下载动作。",
+    "overlays": "flyer/contract/credit-alert/bike-warning/sms/video-call/verification/receipt 用 HTML 叠层呈现，不生成含文字整张图片。",
+    "source": "proposal 代表直接引语拆句/修字；adapted 代表企划书梗概扩展或已有剧情衔接；world 代表原稿世界观导入。"
+  },
+  "adaptationNotes": [
+    "极速版太平老街末尾原稿错误引导杜甫江阁，已依其明确行走动线改为坡子街。",
+    "城市版潮宗街末尾原稿强制引导省博，已改为城市版结营；深度版才引导博物院。",
+    "统一湖南省博物馆/湖南省博物院为湖南博物院；历史/公共文化介绍只作为剧情文化叙述。",
+    "橘子洲原稿仅列红色金融初心任务与高收益风险主题，没有逐句台词；此章是围绕原稿主题的克制扩写。",
+    "太平信用传说原稿仅写故事梗概，不虚构具体真实商号或历史凭据；引路人用概括性信用故事。",
+    "保留终章影像撕裂与崩解演出，但由独立联系本人、核对资金要求等多维核验触发；不把微表情或眨眼视为可靠识别 AI 的方法。",
+    "券包、i豆核销、限定饮品、共享单车均为剧情模拟，与当前原型的演示权益一致，不承诺真实银行发券或商户合作。",
+    "共享单车风险段适配原稿“恶意代码攻击”的虚构设定，用仿冒开锁页面表现，不让玩家执行真实入侵操作。",
+    "所有奖励庆典/净化/城市复明仅在 afterPass 中出现；所有 nextPlace 都按当前路线过滤。"
+  ],
+  "routes": {
+    "quick": {
+      "places": [
+        "wuyi",
+        "taiping",
+        "pozi"
+      ],
+      "scenes": [
+        "wuyi-summons",
+        "wuyi-trap",
+        "taiping-walk",
+        "taiping-contract",
+        "pozi-arrival",
+        "pozi-redemption"
+      ],
+      "final": "pozi"
+    },
+    "city": {
+      "places": [
+        "wuyi",
+        "taiping",
+        "dufu",
+        "chaozong"
+      ],
+      "scenes": [
+        "wuyi-summons",
+        "wuyi-trap",
+        "taiping-walk",
+        "taiping-contract",
+        "jiefangxi-neon",
+        "dufu-credit",
+        "riverside-pursuit",
+        "chaozong-cafe"
+      ],
+      "final": "chaozong"
+    },
+    "deep": {
+      "places": [
+        "juzizhou",
+        "wuyi",
+        "taiping",
+        "dufu",
+        "chaozong",
+        "museum"
+      ],
+      "scenes": [
+        "juzizhou-beginning",
+        "juzizhou-invitation",
+        "wuyi-summons",
+        "wuyi-trap",
+        "taiping-walk",
+        "taiping-contract",
+        "jiefangxi-neon",
+        "dufu-credit",
+        "riverside-pursuit",
+        "chaozong-cafe",
+        "museum-light-corridor",
+        "museum-call"
+      ],
+      "final": "museum"
+    }
+  },
+  "backgrounds": {
+    "juzizhou": {
+      "src": "/assets/novel/backgrounds/juzizhou.png",
+      "description": "橘子洲湘江晨风，青年艺术雕塑与江面，国潮科技 3D 插画，无文字，留出角色与对话框。",
+      "fallback": "/assets/maps/changsha.png"
+    },
+    "wuyi": {
+      "src": "/assets/novel/backgrounds/wuyi.png",
+      "description": "五一广场核心商圈，宽阔步行区与高楼、人流剪影，昼夜交界，国潮科技 3D 插画。",
+      "fallback": "/assets/hero.webp"
+    },
+    "taiping": {
+      "src": "/assets/novel/backgrounds/taiping.png",
+      "description": "太平老街青石板路、红砖白墙和老店檐廊，温暖烟火气，留出前景角色位置。",
+      "fallback": "/assets/maps/route-quick.png"
+    },
+    "jiefangxi": {
+      "src": "/assets/novel/backgrounds/jiefangxi.png",
+      "description": "解放西路夜色、霓虹商业街向湘江方向延伸，带数字光流，不含具体商标和可读招牌。",
+      "fallback": "/assets/maps/route-city.png"
+    },
+    "dufu": {
+      "src": "/assets/novel/backgrounds/dufu.png",
+      "description": "杜甫江阁观景平台或檐廊，湘江与橘子洲远景，江风与金蓝暮色，地标清晰。",
+      "fallback": "/assets/maps/route-city.png"
+    },
+    "riverside": {
+      "src": "/assets/novel/backgrounds/riverside.png",
+      "description": "湘江中路沿江风光带与自行车道，江风暮光，轻微数码黑影轨迹，视线向北延伸。",
+      "fallback": "/assets/maps/route-city.png"
+    },
+    "chaozong": {
+      "src": "/assets/novel/backgrounds/chaozong.png",
+      "description": "潮宗街旧式麻石街区中的青年咖啡馆，暖木柜台、青绿杯子、窗外老街，无可读商标。",
+      "fallback": "/assets/maps/route-city.png"
+    },
+    "pozi": {
+      "src": "/assets/novel/backgrounds/chaozong.png",
+      "description": "坡子街国风饮品与文创概念店，街区烟火、奶茶杯与文创柜台，国潮科技 3D 插画。",
+      "fallback": "/assets/maps/route-quick.png",
+      "canReuse": "chaozong"
+    },
+    "museum": {
+      "src": "/assets/novel/backgrounds/museum.png",
+      "description": "湖南博物院数字展厅，文物展示柜与绢帛纹理投影，庄重金青色，非具体文物错误复刻。",
+      "fallback": "/assets/maps/route-deep.png"
+    },
+    "cultural": {
+      "src": "/assets/novel/backgrounds/cultural.png",
+      "description": "潇湘文化金色流光走廊，古代纹理与现代展厅融合，终章行进场景，无文字。",
+      "fallback": "/assets/maps/route-deep.png"
+    },
+    "cityrestored": {
+      "src": "/assets/novel/backgrounds/wuyi.png",
+      "description": "复用五一广场场景，配合前端 city-restore 演出恢复光彩。",
+      "fallback": "/assets/hero.webp",
+      "canReuse": "wuyi"
+    }
+  },
+  "characters": {
+    "gx": {
+      "name": "工小智",
+      "sprites": {
+        "neutral": "/assets/mascot.png",
+        "happy": "/assets/mascot-happy.png",
+        "think": "/assets/mascot-think.png",
+        "alert": "/assets/mascot-alert.png"
+      },
+      "defaultPosition": "right",
+      "role": "数字伙伴；不代替玩家判断。"
+    },
+    "hanfu": {
+      "name": "老街引路人",
+      "sprites": {
+        "neutral": "/assets/npc-hanfu.png",
+        "happy": "/assets/novel/characters/hanfu-happy.png",
+        "serious": "/assets/novel/characters/hanfu-serious.png"
+      },
+      "fallback": "/assets/npc-hanfu.png",
+      "defaultPosition": "left"
+    },
+    "owner": {
+      "name": "青年主理人",
+      "sprites": {
+        "neutral": "/assets/npc-owner.png",
+        "happy": "/assets/novel/characters/owner-happy.png",
+        "serious": "/assets/novel/characters/owner-serious.png"
+      },
+      "fallback": "/assets/npc-owner.png",
+      "defaultPosition": "left"
+    },
+    "teacher": {
+      "name": "辅导员影像",
+      "sprites": {
+        "neutral": "/assets/npc-teacher.png",
+        "urgent": "/assets/novel/characters/teacher-urgent.png",
+        "calm": "/assets/novel/characters/teacher-calm.png"
+      },
+      "fallback": "/assets/npc-teacher.png",
+      "defaultPosition": "center"
+    },
+    "villain": {
+      "name": "欺诈暗流",
+      "sprites": {
+        "neutral": "/assets/villain.png"
+      },
+      "fallback": null,
+      "defaultPosition": "left",
+      "optional": true,
+      "role": "不在博物院来电前露出反派，以免提前给出答案；可仅用 UI 故障替代。"
+    }
+  },
+  "chapters": {
+    "juzizhou": {
+      "chapter": "序章 · 红色金融初心",
+      "title": "江风里的神秘邀约",
+      "beforeQuiz": [
+        {
+          "type": "narration",
+          "speaker": "镜界记述",
+          "text": "湘江晨风掠过洲岛。你站在橘子洲头，青年艺术雕塑与城市天际线映入眼帘。",
+          "cast": [],
+          "source": "adapted",
+          "sceneId": "juzizhou-beginning",
+          "background": "juzizhou",
+          "setting": "橘子洲头 · 江风与初心",
+          "music": "story",
+          "transition": "crossfade",
+          "sceneTitle": "橘子洲头 · 江风与初心",
+          "id": "juzizhou-beforeQuiz-01"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "镜界系统",
+          "text": "欢迎进入“智游镜界”。在这里，长沙的城市文化节点与你的金融安全探索相连。",
+          "cast": [],
+          "source": "world",
+          "effect": "scan",
+          "sceneId": "juzizhou-beginning",
+          "background": "juzizhou",
+          "setting": "橘子洲头 · 江风与初心",
+          "music": "story",
+          "id": "juzizhou-beforeQuiz-02"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "工小智",
+          "text": "主理人，我是你的数字伙伴工小智。接下来的判断，由你作出；我会陪你找线索、核实信息。",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "happy",
+              "position": "right",
+              "motion": "enter-right"
+            }
+          ],
+          "source": "world",
+          "sceneId": "juzizhou-beginning",
+          "background": "juzizhou",
+          "setting": "橘子洲头 · 江风与初心",
+          "music": "story",
+          "id": "juzizhou-beforeQuiz-03"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "工小智",
+          "text": "这一站，是红色金融初心任务。金融服务的出发点，是人的真实生活；保护好每一份积蓄，也是守护自己的未来。",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "think",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "source": "adapted",
+          "sceneId": "juzizhou-beginning",
+          "background": "juzizhou",
+          "setting": "橘子洲头 · 江风与初心",
+          "music": "story",
+          "id": "juzizhou-beforeQuiz-04"
+        },
+        {
+          "type": "narration",
+          "speaker": "镜界记述",
+          "text": "探索页面扫过江岸。原本平稳的青色光带中，一封金色邀请函突然闪烁。",
+          "cast": [],
+          "effect": "scan",
+          "source": "adapted",
+          "sceneId": "juzizhou-beginning",
+          "background": "juzizhou",
+          "setting": "橘子洲头 · 江风与初心",
+          "music": "story",
+          "id": "juzizhou-beforeQuiz-05"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "陌生邀请函",
+          "text": "“内部投资名额，收益稳定。加入群聊，每天固定赚 3%，错过今天不再开放。”",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "alert",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "overlay": "investment-invitation",
+          "effect": "warning",
+          "source": "adapted",
+          "sceneId": "juzizhou-invitation",
+          "background": "juzizhou",
+          "setting": "橘子洲头 · 财富邀请函",
+          "music": "tension",
+          "transition": "crossfade",
+          "sceneTitle": "橘子洲头 · 财富邀请函",
+          "id": "juzizhou-beforeQuiz-06"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "工小智",
+          "text": "江面可以风平浪静，收益承诺却不能只看“稳赚”。高回报与零风险同时出现，值得停下来核实。",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "think",
+              "position": "right",
+              "motion": "lean-in"
+            }
+          ],
+          "source": "adapted",
+          "sceneId": "juzizhou-invitation",
+          "background": "juzizhou",
+          "setting": "橘子洲头 · 财富邀请函",
+          "music": "tension",
+          "id": "juzizhou-beforeQuiz-07"
+        },
+        {
+          "type": "choice",
+          "speaker": "你的判断",
+          "text": "邀请函附着一枚陌生二维码。你会先做什么？",
+          "options": [
+            {
+              "id": "verify",
+              "label": "先核实机构和产品资质",
+              "feedback": "你没有追随倒计时，而是把注意力放回信息来源。查证资质、了解风险，比群聊里的收益截图更可靠。",
+              "safe": true
+            },
+            {
+              "id": "join",
+              "label": "先入群看看收益截图",
+              "feedback": "收益截图和群成员的夸赞也可能是布置好的。先别下载安装包或转账，退出邀请，回到独立核实。",
+              "safe": false
+            }
+          ],
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "think",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "overlay": "investment-invitation",
+          "source": "adapted",
+          "sceneId": "juzizhou-invitation",
+          "background": "juzizhou",
+          "setting": "橘子洲头 · 财富邀请函",
+          "music": "tension",
+          "id": "juzizhou-beforeQuiz-08"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "镜界系统",
+          "text": "风险线索已标记：高收益承诺、内部消息、陌生投资平台。",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "alert",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "clue": "高收益承诺不等于真实收益；投资决策先核实资质并了解风险。",
+          "effect": "clue",
+          "source": "adapted",
+          "sceneId": "juzizhou-invitation",
+          "background": "juzizhou",
+          "setting": "橘子洲头 · 财富邀请函",
+          "music": "tension",
+          "id": "juzizhou-beforeQuiz-09"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "工小智",
+          "text": "准备好了吗？把这封邀请函里的异常代码，交给你的判断。",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "think",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "source": "adapted",
+          "sceneId": "juzizhou-invitation",
+          "background": "juzizhou",
+          "setting": "橘子洲头 · 财富邀请函",
+          "music": "tension",
+          "id": "juzizhou-beforeQuiz-10"
+        },
+        {
+          "type": "quiz",
+          "speaker": "工小智",
+          "text": "先完成投资风险挑战。等核验通过，我们再点亮这一站。",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "think",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "place": "juzizhou",
+          "cta": "开始情境挑战",
+          "sceneId": "juzizhou-invitation",
+          "background": "juzizhou",
+          "setting": "橘子洲头 · 财富邀请函",
+          "music": "tension",
+          "id": "juzizhou-beforeQuiz-11"
+        }
+      ],
+      "afterPass": [
+        {
+          "type": "narration",
+          "speaker": "镜界记述",
+          "text": "邀请函上的夸张数字失去光泽。江岸的青色光带重新连接，第一枚探索印章缓缓亮起。",
+          "cast": [],
+          "effect": "purify",
+          "source": "adapted",
+          "sceneId": "juzizhou-cleared",
+          "background": "juzizhou",
+          "setting": "橘子洲头 · 初心点亮",
+          "music": "story",
+          "transition": "crossfade",
+          "sceneTitle": "橘子洲头 · 初心点亮",
+          "id": "juzizhou-afterPass-01"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "工小智",
+          "text": "守住本金，理性判断。红色金融初心这一站，你完成了。",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "happy",
+              "position": "right",
+              "motion": "nod"
+            }
+          ],
+          "source": "adapted",
+          "sceneId": "juzizhou-cleared",
+          "background": "juzizhou",
+          "setting": "橘子洲头 · 初心点亮",
+          "music": "story",
+          "id": "juzizhou-afterPass-02"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "镜界系统",
+          "text": "剧情中的“工银青绿出行专享券包”已激活。接下来可以通过数字跃迁，切换到五一广场。",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "happy",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "overlay": "travel-pack",
+          "simulation": true,
+          "source": "proposal",
+          "sceneId": "juzizhou-cleared",
+          "background": "juzizhou",
+          "setting": "橘子洲头 · 初心点亮",
+          "music": "story",
+          "id": "juzizhou-afterPass-03"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "工小智",
+          "text": "沿着湘江的风，我们去长沙最繁华的核心商圈。真正的调查，从城市人流中展开。",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "happy",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "source": "adapted",
+          "sceneId": "juzizhou-cleared",
+          "background": "juzizhou",
+          "setting": "橘子洲头 · 初心点亮",
+          "music": "story",
+          "id": "juzizhou-afterPass-04"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "工小智",
+          "text": "下一站，五一广场。继续寻找藏在日常生活里的异常代码。",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "happy",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "nextPlace": "wuyi",
+          "whenModes": [
+            "deep"
+          ],
+          "sceneId": "juzizhou-cleared",
+          "background": "juzizhou",
+          "setting": "橘子洲头 · 初心点亮",
+          "music": "story",
+          "id": "juzizhou-afterPass-05"
+        }
+      ],
+      "afterFail": [
+        {
+          "type": "dialogue",
+          "speaker": "工小智",
+          "text": "先别被“稳定收益”几个字牵着走。截图、内部消息和群聊口碑，都不能替代资质核实。",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "think",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "sceneId": "juzizhou-recheck",
+          "background": "juzizhou",
+          "setting": "橘子洲头 · 再看邀请函",
+          "music": "story",
+          "transition": "crossfade",
+          "sceneTitle": "橘子洲头 · 再看邀请函",
+          "id": "juzizhou-afterFail-01"
+        },
+        {
+          "type": "retry",
+          "speaker": "工小智",
+          "text": "我们再检查一遍风险线索。判断可以慢一点，资金安全不能省步骤。",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "think",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "cta": "重新检查风险线索",
+          "sceneId": "juzizhou-recheck",
+          "background": "juzizhou",
+          "setting": "橘子洲头 · 再看邀请函",
+          "music": "story",
+          "id": "juzizhou-afterFail-02"
+        }
+      ]
+    },
+    "wuyi": {
+      "chapter": "第一幕 · 城市流动的陷阱",
+      "title": "人潮中的智能召集令",
+      "beforeQuiz": [
+        {
+          "type": "narration",
+          "speaker": "镜界记述",
+          "text": "五一广场的人流汇入长沙核心商圈。你打开活动探索页面，数字城市的轮廓沿真实街道展开。",
+          "cast": [],
+          "source": "proposal",
+          "sceneId": "wuyi-summons",
+          "background": "wuyi",
+          "setting": "五一广场 · 智能召集令",
+          "music": "story",
+          "transition": "crossfade",
+          "sceneTitle": "五一广场 · 智能召集令",
+          "id": "wuyi-beforeQuiz-01"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "镜界系统",
+          "text": "检测到城市数字安全系统出现异常，部分青年用户正在遭遇未知风险事件。请协助完成风险调查，寻找隐藏在城市中的异常代码。",
+          "cast": [],
+          "effect": "warning",
+          "source": "proposal",
+          "sceneId": "wuyi-summons",
+          "background": "wuyi",
+          "setting": "五一广场 · 智能召集令",
+          "music": "story",
+          "id": "wuyi-beforeQuiz-02"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "工小智",
+          "text": "主理人，我是工小智。一个模拟现实金融风险的程序——“欺诈暗流”，正在镜界里制造虚假信息和身份伪装。",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "alert",
+              "position": "right",
+              "motion": "enter-right"
+            }
+          ],
+          "source": "world",
+          "sceneId": "wuyi-summons",
+          "background": "wuyi",
+          "setting": "五一广场 · 智能召集令",
+          "music": "story",
+          "id": "wuyi-beforeQuiz-03"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "工小智",
+          "text": "我们的任务，是发现风险、识别风险、解决风险，再守护这座城市。我会给你提示，最终的判断仍然属于你。",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "think",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "source": "world",
+          "sceneId": "wuyi-summons",
+          "background": "wuyi",
+          "setting": "五一广场 · 智能召集令",
+          "music": "story",
+          "id": "wuyi-beforeQuiz-04"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "镜界系统",
+          "text": "当前行动模式：极速打卡版。完成基础调查后，从太平老街前往坡子街收官。",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "happy",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "whenModes": [
+            "quick"
+          ],
+          "source": "world",
+          "sceneId": "wuyi-summons",
+          "background": "wuyi",
+          "setting": "五一广场 · 智能召集令",
+          "music": "story",
+          "id": "wuyi-beforeQuiz-05"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "镜界系统",
+          "text": "当前行动模式：城市探索版。沿老街与湘江推进调查，在潮宗街完成本次 CityWalk。",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "happy",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "whenModes": [
+            "city"
+          ],
+          "source": "world",
+          "sceneId": "wuyi-summons",
+          "background": "wuyi",
+          "setting": "五一广场 · 智能召集令",
+          "music": "story",
+          "id": "wuyi-beforeQuiz-06"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "镜界系统",
+          "text": "剧情中的“工银青绿出行专享券包”已发放，内含骑行与打车体验券。到达沿江风光带后，你可以激活它，选择合适的出行方式。",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "happy",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "whenModes": [
+            "city"
+          ],
+          "overlay": "travel-pack",
+          "simulation": true,
+          "source": "proposal",
+          "sceneId": "wuyi-summons",
+          "background": "wuyi",
+          "setting": "五一广场 · 智能召集令",
+          "music": "story",
+          "id": "wuyi-beforeQuiz-07"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "镜界系统",
+          "text": "当前行动模式：深度体验版。沿江主线之后，继续进入湖南博物院，追踪暗流的最终伪装。",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "happy",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "whenModes": [
+            "deep"
+          ],
+          "source": "world",
+          "sceneId": "wuyi-summons",
+          "background": "wuyi",
+          "setting": "五一广场 · 智能召集令",
+          "music": "story",
+          "id": "wuyi-beforeQuiz-08"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "工小智",
+          "text": "主理人，我们现在走的是长沙最繁华的核心商圈。但请注意，“欺诈暗流”最喜欢在人潮汹涌的地方伪装。",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "think",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "source": "proposal",
+          "sceneId": "wuyi-trap",
+          "background": "wuyi",
+          "setting": "五一广场 · 人潮里的传单",
+          "music": "tension",
+          "transition": "crossfade",
+          "sceneTitle": "五一广场 · 人潮里的传单",
+          "id": "wuyi-beforeQuiz-09"
+        },
+        {
+          "type": "narration",
+          "speaker": "镜界记述",
+          "text": "一张色彩鲜亮的文创礼品传单被递到你面前。二维码旁，是“免费领取”和“进群返现”的字样。",
+          "cast": [],
+          "overlay": "flyer",
+          "source": "proposal",
+          "sceneId": "wuyi-trap",
+          "background": "wuyi",
+          "setting": "五一广场 · 人潮里的传单",
+          "music": "tension",
+          "id": "wuyi-beforeQuiz-10"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "工小智",
+          "text": "你刚才是不是收到了“免费领取长沙文创礼品、扫码进入群聊返现”的传单？",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "alert",
+              "position": "right",
+              "motion": "lean-in"
+            }
+          ],
+          "overlay": "flyer",
+          "source": "proposal",
+          "sceneId": "wuyi-trap",
+          "background": "wuyi",
+          "setting": "五一广场 · 人潮里的传单",
+          "music": "tension",
+          "id": "wuyi-beforeQuiz-11"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "传单提示",
+          "text": "“先领小礼品，再做三单任务。垫付金额越高，返现金额越多。”",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "alert",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "overlay": "flyer",
+          "effect": "glitch",
+          "source": "adapted",
+          "sceneId": "wuyi-trap",
+          "background": "wuyi",
+          "setting": "五一广场 · 人潮里的传单",
+          "music": "tension",
+          "id": "wuyi-beforeQuiz-12"
+        },
+        {
+          "type": "choice",
+          "speaker": "你的判断",
+          "text": "你准备如何处理这张传单？",
+          "options": [
+            {
+              "id": "stop",
+              "label": "不扫码、不垫资，先核实活动",
+              "feedback": "你没有进入陌生群聊，也没有让礼品诱惑替你作决定。小额返利可能只是取得信任的第一步。",
+              "safe": true
+            },
+            {
+              "id": "try",
+              "label": "先做一单，拿到返现就退出",
+              "feedback": "第一单返现也不能证明后续任务安全。刷单返利常用小恩小惠建立信任，再诱导持续垫资。",
+              "safe": false
+            }
+          ],
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "think",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "overlay": "flyer",
+          "source": "adapted",
+          "sceneId": "wuyi-trap",
+          "background": "wuyi",
+          "setting": "五一广场 · 人潮里的传单",
+          "music": "tension",
+          "id": "wuyi-beforeQuiz-13"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "工小智",
+          "text": "这是典型的刷单返利诈骗前兆，利用小恩小惠获取信任，切勿因小失大！",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "alert",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "source": "proposal",
+          "sceneId": "wuyi-trap",
+          "background": "wuyi",
+          "setting": "五一广场 · 人潮里的传单",
+          "music": "tension",
+          "id": "wuyi-beforeQuiz-14"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "镜界系统",
+          "text": "第一组风险线索：免费礼品、群聊晒收益、要求垫付、连续做单。",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "think",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "clue": "凡是要求先垫资的“刷单返佣”，先停下来；陌生链接与收益截图不能作为可信依据。",
+          "effect": "clue",
+          "source": "adapted",
+          "sceneId": "wuyi-trap",
+          "background": "wuyi",
+          "setting": "五一广场 · 人潮里的传单",
+          "music": "tension",
+          "id": "wuyi-beforeQuiz-15"
+        },
+        {
+          "type": "quiz",
+          "speaker": "工小智",
+          "text": "先把传单里的风险判断清楚，再继续向太平老街出发。",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "think",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "place": "wuyi",
+          "cta": "开始情境挑战",
+          "sceneId": "wuyi-trap",
+          "background": "wuyi",
+          "setting": "五一广场 · 人潮里的传单",
+          "music": "tension",
+          "id": "wuyi-beforeQuiz-16"
+        }
+      ],
+      "afterPass": [
+        {
+          "type": "narration",
+          "speaker": "镜界记述",
+          "text": "传单里的异常光点熄灭。人潮上方，一段青色安全网络重新亮起。",
+          "cast": [],
+          "effect": "purify",
+          "source": "adapted",
+          "sceneId": "wuyi-cleared",
+          "background": "wuyi",
+          "setting": "五一广场 · 商圈防线",
+          "music": "story",
+          "transition": "crossfade",
+          "sceneTitle": "五一广场 · 商圈防线",
+          "id": "wuyi-afterPass-01"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "工小智",
+          "text": "第一条暗流线索已经拆解。免费并不意味着没有代价，先核实来源，就多了一道防线。",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "happy",
+              "position": "right",
+              "motion": "nod"
+            }
+          ],
+          "source": "adapted",
+          "sceneId": "wuyi-cleared",
+          "background": "wuyi",
+          "setting": "五一广场 · 商圈防线",
+          "music": "story",
+          "id": "wuyi-afterPass-02"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "工小智",
+          "text": "开启“边走边聊”模式。沿着商圈向西，我们走进太平老街北口。",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "happy",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "source": "proposal",
+          "sceneId": "wuyi-cleared",
+          "background": "wuyi",
+          "setting": "五一广场 · 商圈防线",
+          "music": "story",
+          "id": "wuyi-afterPass-03"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "工小智",
+          "text": "下一站，太平老街。放慢脚步，听听老长沙的故事。",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "happy",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "nextPlace": "taiping",
+          "whenModes": [
+            "quick",
+            "city",
+            "deep"
+          ],
+          "sceneId": "wuyi-cleared",
+          "background": "wuyi",
+          "setting": "五一广场 · 商圈防线",
+          "music": "story",
+          "id": "wuyi-afterPass-04"
+        }
+      ],
+      "afterFail": [
+        {
+          "type": "dialogue",
+          "speaker": "工小智",
+          "text": "礼品是真的、第一笔返利到账了，也不能证明后续要求安全。注意“持续做单”和“先垫资金”。",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "think",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "sceneId": "wuyi-recheck",
+          "background": "wuyi",
+          "setting": "五一广场 · 停在二维码之前",
+          "music": "story",
+          "transition": "crossfade",
+          "sceneTitle": "五一广场 · 停在二维码之前",
+          "id": "wuyi-afterFail-01"
+        },
+        {
+          "type": "retry",
+          "speaker": "工小智",
+          "text": "把信任交给核实，而不是群聊截图。再来一次，我们一起看清传单。",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "think",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "cta": "重新检查风险线索",
+          "sceneId": "wuyi-recheck",
+          "background": "wuyi",
+          "setting": "五一广场 · 停在二维码之前",
+          "music": "story",
+          "id": "wuyi-afterFail-02"
+        }
+      ]
+    },
+    "taiping": {
+      "chapter": "第一关 · 汉服男的信用契约",
+      "title": "青石板路上的一诺千金",
+      "beforeQuiz": [
+        {
+          "type": "narration",
+          "speaker": "镜界记述",
+          "text": "商圈的喧闹渐渐退到身后。青石板路铺向巷道深处，红砖白墙与老店屋檐出现在数字探索页面上。",
+          "cast": [],
+          "source": "proposal",
+          "sceneId": "taiping-walk",
+          "background": "taiping",
+          "setting": "太平老街北口 · 边走边聊",
+          "music": "story",
+          "transition": "crossfade",
+          "sceneTitle": "太平老街北口 · 边走边聊",
+          "id": "taiping-beforeQuiz-01"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "工小智",
+          "text": "主理人，放慢脚步。看左边的商铺，那是长沙的百年老店。",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "happy",
+              "position": "right",
+              "motion": "enter-right"
+            }
+          ],
+          "source": "proposal",
+          "sceneId": "taiping-walk",
+          "background": "taiping",
+          "setting": "太平老街北口 · 边走边聊",
+          "music": "story",
+          "id": "taiping-beforeQuiz-02"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "工小智",
+          "text": "街边随处可见的网红文创和特色小吃，正是这座城市文脉与市井文化的构成点。",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "happy",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "source": "proposal",
+          "sceneId": "taiping-walk",
+          "background": "taiping",
+          "setting": "太平老街北口 · 边走边聊",
+          "music": "story",
+          "id": "taiping-beforeQuiz-03"
+        },
+        {
+          "type": "narration",
+          "speaker": "镜界记述",
+          "text": "游客的喧嚣和老街的静谧交织。你穿过檐廊，数字光流在每一块青砖边缘轻轻亮起。",
+          "cast": [],
+          "effect": "fireflies",
+          "source": "proposal",
+          "sceneId": "taiping-walk",
+          "background": "taiping",
+          "setting": "太平老街北口 · 边走边聊",
+          "music": "story",
+          "id": "taiping-beforeQuiz-04"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "工小智",
+          "text": "在这喧嚣的表象下，藏着很多不为人知的故事，我们只需用心捕捉即可。",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "think",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "source": "proposal",
+          "sceneId": "taiping-walk",
+          "background": "taiping",
+          "setting": "太平老街北口 · 边走边聊",
+          "music": "story",
+          "id": "taiping-beforeQuiz-05"
+        },
+        {
+          "type": "narration",
+          "speaker": "镜界记述",
+          "text": "街角，一位身穿精致汉服的神秘青年出现。他手中展开一卷泛黄的“老长沙契约”，向你作揖。",
+          "cast": [
+            {
+              "id": "hanfu",
+              "expression": "neutral",
+              "position": "left",
+              "motion": "enter-left"
+            },
+            {
+              "id": "gx",
+              "expression": "think",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "overlay": "contract",
+          "source": "proposal",
+          "sceneId": "taiping-contract",
+          "background": "taiping",
+          "setting": "太平老街 · 老长沙契约",
+          "music": "story",
+          "transition": "crossfade",
+          "sceneTitle": "太平老街 · 老长沙契约",
+          "id": "taiping-beforeQuiz-06"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "老街引路人",
+          "text": "客官，您若有闲，可愿听听这老街的故事？这里曾是贾谊公思想的发源地，每一块青砖下都藏着“民本”的厚重。",
+          "cast": [
+            {
+              "id": "hanfu",
+              "expression": "happy",
+              "position": "left",
+              "motion": "bow"
+            },
+            {
+              "id": "gx",
+              "expression": "think",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "source": "proposal",
+          "sceneId": "taiping-contract",
+          "background": "taiping",
+          "setting": "太平老街 · 老长沙契约",
+          "music": "story",
+          "id": "taiping-beforeQuiz-07"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "老街引路人",
+          "text": "这里充满市井烟火气。无论是摊贩的辛劳，还是商铺的繁盛，无不体现着金融润物细无声的力量。",
+          "cast": [
+            {
+              "id": "hanfu",
+              "expression": "neutral",
+              "position": "right",
+              "motion": "idle"
+            },
+            {
+              "id": "gx",
+              "expression": "happy",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "source": "proposal",
+          "sceneId": "taiping-contract",
+          "background": "taiping",
+          "setting": "太平老街 · 老长沙契约",
+          "music": "story",
+          "id": "taiping-beforeQuiz-08"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "老街引路人",
+          "text": "老长沙的商人讲“一诺千金”。一纸契约能被珍惜，靠的是把约定说明白、把承诺做扎实。",
+          "cast": [
+            {
+              "id": "hanfu",
+              "expression": "serious",
+              "position": "right",
+              "motion": "idle"
+            },
+            {
+              "id": "gx",
+              "expression": "think",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "source": "adapted",
+          "sceneId": "taiping-contract",
+          "background": "taiping",
+          "setting": "太平老街 · 老长沙契约",
+          "music": "story",
+          "id": "taiping-beforeQuiz-09"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "老街引路人",
+          "text": "守信不是盲目信任。如今的契约，也要先看清总费用、服务费与还款条件，再决定是否签下自己的名字。",
+          "cast": [
+            {
+              "id": "hanfu",
+              "expression": "serious",
+              "position": "right",
+              "motion": "idle"
+            },
+            {
+              "id": "gx",
+              "expression": "think",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "overlay": "contract",
+          "source": "adapted",
+          "sceneId": "taiping-contract",
+          "background": "taiping",
+          "setting": "太平老街 · 老长沙契约",
+          "music": "story",
+          "id": "taiping-beforeQuiz-10"
+        },
+        {
+          "type": "narration",
+          "speaker": "镜界记述",
+          "text": "契约的一角闪过冷蓝色代码。“零利息”“每月最低”很醒目，完整费用与还款条款却被遮住。",
+          "cast": [
+            {
+              "id": "hanfu",
+              "expression": "serious",
+              "position": "right",
+              "motion": "idle"
+            },
+            {
+              "id": "gx",
+              "expression": "alert",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "overlay": "contract",
+          "effect": "scan",
+          "source": "adapted",
+          "sceneId": "taiping-contract",
+          "background": "taiping",
+          "setting": "太平老街 · 老长沙契约",
+          "music": "story",
+          "id": "taiping-beforeQuiz-11"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "工小智",
+          "text": "主理人，先不要让漂亮的标题代替完整信息。涉及借贷与个人资料，更要看清全部条款。",
+          "cast": [
+            {
+              "id": "hanfu",
+              "expression": "serious",
+              "position": "right",
+              "motion": "idle"
+            },
+            {
+              "id": "gx",
+              "expression": "alert",
+              "position": "right",
+              "motion": "lean-in"
+            }
+          ],
+          "source": "adapted",
+          "sceneId": "taiping-contract",
+          "background": "taiping",
+          "setting": "太平老街 · 老长沙契约",
+          "music": "story",
+          "id": "taiping-beforeQuiz-12"
+        },
+        {
+          "type": "choice",
+          "speaker": "你的判断",
+          "text": "这份消费契约的费用明细被折在背面。你会怎么做？",
+          "options": [
+            {
+              "id": "read",
+              "label": "展开全部条款，计算费用与还款压力",
+              "feedback": "你把折页展开，保留了完整信息。名义上的“零利息”也可能包含服务费，先了解总成本与还款能力。",
+              "safe": true
+            },
+            {
+              "id": "sign",
+              "label": "只看每月最低金额，先签下来",
+              "feedback": "最低月供不能代表总成本。不要签空白或内容不清的合同，也不要用新的借贷掩盖旧的还款压力。",
+              "safe": false
+            }
+          ],
+          "cast": [
+            {
+              "id": "hanfu",
+              "expression": "serious",
+              "position": "right",
+              "motion": "idle"
+            },
+            {
+              "id": "gx",
+              "expression": "think",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "overlay": "contract",
+          "source": "adapted",
+          "sceneId": "taiping-contract",
+          "background": "taiping",
+          "setting": "太平老街 · 老长沙契约",
+          "music": "story",
+          "id": "taiping-beforeQuiz-13"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "镜界系统",
+          "text": "契约线索：费用明细、还款条件、个人信息用途。守信与理性消费，都需要完整信息。",
+          "cast": [
+            {
+              "id": "hanfu",
+              "expression": "neutral",
+              "position": "right",
+              "motion": "idle"
+            },
+            {
+              "id": "gx",
+              "expression": "think",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "clue": "看清合同，了解总费用与还款能力；不签空白合同，不随意交出敏感个人资料。",
+          "effect": "clue",
+          "source": "adapted",
+          "sceneId": "taiping-contract",
+          "background": "taiping",
+          "setting": "太平老街 · 老长沙契约",
+          "music": "story",
+          "id": "taiping-beforeQuiz-14"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "老街引路人",
+          "text": "客官，契约里的字不怕你读得慢，只怕你没看清。把这份清醒，带进今天的消费吧。",
+          "cast": [
+            {
+              "id": "hanfu",
+              "expression": "happy",
+              "position": "right",
+              "motion": "idle"
+            },
+            {
+              "id": "gx",
+              "expression": "happy",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "source": "adapted",
+          "sceneId": "taiping-contract",
+          "background": "taiping",
+          "setting": "太平老街 · 老长沙契约",
+          "music": "story",
+          "id": "taiping-beforeQuiz-15"
+        },
+        {
+          "type": "quiz",
+          "speaker": "工小智",
+          "text": "先完成契约里的风险挑战。我们再听这一诺千金，如何落在今天。",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "think",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "place": "taiping",
+          "cta": "开始情境挑战",
+          "sceneId": "taiping-contract",
+          "background": "taiping",
+          "setting": "太平老街 · 老长沙契约",
+          "music": "story",
+          "id": "taiping-beforeQuiz-16"
+        }
+      ],
+      "afterPass": [
+        {
+          "type": "narration",
+          "speaker": "镜界记述",
+          "text": "遮住条款的异常代码散开，完整契约重现。老街引路人合起卷轴，微笑着点头。",
+          "cast": [
+            {
+              "id": "hanfu",
+              "expression": "happy",
+              "position": "left",
+              "motion": "nod"
+            },
+            {
+              "id": "gx",
+              "expression": "happy",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "effect": "purify",
+          "source": "adapted",
+          "sceneId": "taiping-cleared",
+          "background": "taiping",
+          "setting": "太平老街 · 契约归真",
+          "music": "story",
+          "transition": "crossfade",
+          "sceneTitle": "太平老街 · 契约归真",
+          "id": "taiping-afterPass-01"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "老街引路人",
+          "text": "一诺千金，也从每一次认真核对开始。客官，愿你走得自在，也判断得清楚。",
+          "cast": [
+            {
+              "id": "hanfu",
+              "expression": "happy",
+              "position": "right",
+              "motion": "idle"
+            },
+            {
+              "id": "gx",
+              "expression": "happy",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "source": "adapted",
+          "sceneId": "taiping-cleared",
+          "background": "taiping",
+          "setting": "太平老街 · 契约归真",
+          "music": "story",
+          "id": "taiping-afterPass-02"
+        },
+        {
+          "type": "narration",
+          "speaker": "镜界记述",
+          "text": "引路人转身，消失在巷道深处。青砖上的数字光流恢复温暖，工小智接入下一段动线。",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "happy",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "effect": "fireflies",
+          "source": "proposal",
+          "sceneId": "taiping-cleared",
+          "background": "taiping",
+          "setting": "太平老街 · 契约归真",
+          "music": "story",
+          "id": "taiping-afterPass-03"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "工小智",
+          "text": "两千年的历史沉淀确实厚重。这条老街不仅是文旅地标，更让我们看到信用与生活的连接。",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "happy",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "source": "proposal",
+          "sceneId": "taiping-cleared",
+          "background": "taiping",
+          "setting": "太平老街 · 契约归真",
+          "music": "story",
+          "id": "taiping-afterPass-04"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "工小智",
+          "text": "极速路线的终点在坡子街。穿出老街南口，去看看长沙限定的文创与饮品，让这段探索安心收官。",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "happy",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "nextPlace": "pozi",
+          "whenModes": [
+            "quick"
+          ],
+          "sceneId": "taiping-cleared",
+          "background": "taiping",
+          "setting": "太平老街 · 契约归真",
+          "music": "story",
+          "id": "taiping-afterPass-05"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "工小智",
+          "text": "走，穿越解放西路，登上杜甫江阁。那里的江风，更适合静下心来品味刚才的故事。",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "happy",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "nextPlace": "dufu",
+          "whenModes": [
+            "city",
+            "deep"
+          ],
+          "sceneId": "taiping-cleared",
+          "background": "taiping",
+          "setting": "太平老街 · 契约归真",
+          "music": "story",
+          "id": "taiping-afterPass-06"
+        }
+      ],
+      "afterFail": [
+        {
+          "type": "dialogue",
+          "speaker": "老街引路人",
+          "text": "别着急签名。宣传上的几个字，不能代替契约里的完整约定。",
+          "cast": [
+            {
+              "id": "hanfu",
+              "expression": "serious",
+              "position": "right",
+              "motion": "idle"
+            },
+            {
+              "id": "gx",
+              "expression": "think",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "sceneId": "taiping-recheck",
+          "background": "taiping",
+          "setting": "太平老街 · 把契约读完整",
+          "music": "story",
+          "transition": "crossfade",
+          "sceneTitle": "太平老街 · 把契约读完整",
+          "id": "taiping-afterFail-01"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "工小智",
+          "text": "把服务费、总成本、还款能力和个人信息用途一起考虑。没有看清，就先保留决定。",
+          "cast": [
+            {
+              "id": "hanfu",
+              "expression": "serious",
+              "position": "right",
+              "motion": "idle"
+            },
+            {
+              "id": "gx",
+              "expression": "think",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "sceneId": "taiping-recheck",
+          "background": "taiping",
+          "setting": "太平老街 · 把契约读完整",
+          "music": "story",
+          "id": "taiping-afterFail-02"
+        },
+        {
+          "type": "retry",
+          "speaker": "工小智",
+          "text": "我们重新检查契约。认真阅读本身，就是守护信用的一步。",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "think",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "cta": "重新检查风险线索",
+          "sceneId": "taiping-recheck",
+          "background": "taiping",
+          "setting": "太平老街 · 把契约读完整",
+          "music": "story",
+          "id": "taiping-afterFail-03"
+        }
+      ]
+    },
+    "dufu": {
+      "chapter": "第二幕 · 江阁上的风控守护",
+      "title": "霓虹尽头的黑金弹窗",
+      "beforeQuiz": [
+        {
+          "type": "narration",
+          "speaker": "镜界记述",
+          "text": "你走到解放西路繁华路口。高处的数字霓虹灯牌交替闪烁，绚丽光影映在街面上。",
+          "cast": [],
+          "effect": "neon",
+          "source": "proposal",
+          "sceneId": "jiefangxi-neon",
+          "background": "jiefangxi",
+          "setting": "解放西路 · 数字霓虹",
+          "music": "story",
+          "transition": "crossfade",
+          "sceneTitle": "解放西路 · 数字霓虹",
+          "id": "dufu-beforeQuiz-01"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "工小智",
+          "text": "哇噢，不愧是解放西，这里的数字霓虹闪得小象眼睛都花了！",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "happy",
+              "position": "right",
+              "motion": "bounce"
+            }
+          ],
+          "source": "proposal",
+          "sceneId": "jiefangxi-neon",
+          "background": "jiefangxi",
+          "setting": "解放西路 · 数字霓虹",
+          "music": "story",
+          "id": "dufu-beforeQuiz-02"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "工小智",
+          "text": "主理人你看，这里的车水马龙，就是长沙夜经济活力的缩影。",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "happy",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "source": "proposal",
+          "sceneId": "jiefangxi-neon",
+          "background": "jiefangxi",
+          "setting": "解放西路 · 数字霓虹",
+          "music": "story",
+          "id": "dufu-beforeQuiz-03"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "工小智",
+          "text": "在这种热闹下，更要记住“理性消费”。享受都市繁华的同时，也保护好自己的数字钱包。",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "think",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "source": "proposal",
+          "sceneId": "jiefangxi-neon",
+          "background": "jiefangxi",
+          "setting": "解放西路 · 数字霓虹",
+          "music": "story",
+          "id": "dufu-beforeQuiz-04"
+        },
+        {
+          "type": "narration",
+          "speaker": "镜界记述",
+          "text": "一道青色引导箭头点亮。霓虹渐渐退后，江边的风带来杜甫江阁的轮廓。",
+          "cast": [],
+          "effect": "route-arrow",
+          "source": "proposal",
+          "sceneId": "jiefangxi-neon",
+          "background": "jiefangxi",
+          "setting": "解放西路 · 数字霓虹",
+          "music": "story",
+          "id": "dufu-beforeQuiz-05"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "工小智",
+          "text": "杜甫江阁就在前面。跟着箭头走，别被旁边那些虚幻的商业广告带偏了！",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "happy",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "source": "proposal",
+          "sceneId": "jiefangxi-neon",
+          "background": "jiefangxi",
+          "setting": "解放西路 · 数字霓虹",
+          "music": "story",
+          "id": "dufu-beforeQuiz-06"
+        },
+        {
+          "type": "narration",
+          "speaker": "镜界记述",
+          "text": "登上江阁，湘江与橘子洲的景色展开。正当你停下脚步，手机页面突然被一块黑金色弹窗遮住。",
+          "cast": [],
+          "effect": "warning",
+          "overlay": "credit-alert",
+          "source": "proposal",
+          "sceneId": "dufu-credit",
+          "background": "dufu",
+          "setting": "杜甫江阁 · 征信风险危机",
+          "music": "tension",
+          "transition": "crossfade",
+          "sceneTitle": "杜甫江阁 · 征信风险危机",
+          "id": "dufu-beforeQuiz-07"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "黑金弹窗",
+          "text": "“征信异常！需要立即付费修复。请上传隐私证明照，按要求转账，否则影响你的个人信用。”",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "alert",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "overlay": "credit-alert",
+          "effect": "glitch",
+          "source": "proposal",
+          "sceneId": "dufu-credit",
+          "background": "dufu",
+          "setting": "杜甫江阁 · 征信风险危机",
+          "music": "tension",
+          "id": "dufu-beforeQuiz-08"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "工小智",
+          "text": "主理人，先停下来。它在冒充官方，用恐慌催促你上传隐私、支付所谓修复费。",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "alert",
+              "position": "right",
+              "motion": "lean-in"
+            }
+          ],
+          "source": "proposal",
+          "sceneId": "dufu-credit",
+          "background": "dufu",
+          "setting": "杜甫江阁 · 征信风险危机",
+          "music": "tension",
+          "id": "dufu-beforeQuiz-09"
+        },
+        {
+          "type": "choice",
+          "speaker": "你的判断",
+          "text": "黑金弹窗不断催促操作。你选择如何反击？",
+          "options": [
+            {
+              "id": "block-verify",
+              "label": "关闭并拉黑，从已知官方渠道核验",
+              "feedback": "你没有使用弹窗提供的链接或号码。独立打开已知官方渠道，才能核实信息来源。",
+              "safe": true
+            },
+            {
+              "id": "pay",
+              "label": "先支付修复费，避免影响信用",
+              "feedback": "“付费洗白”和陌生“内部渠道”是重要风险信号。不要向它交出证件照片、密码或验证码，先停止操作并独立核验。",
+              "safe": false
+            }
+          ],
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "think",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "overlay": "credit-alert",
+          "source": "proposal",
+          "sceneId": "dufu-credit",
+          "background": "dufu",
+          "setting": "杜甫江阁 · 征信风险危机",
+          "music": "tension",
+          "id": "dufu-beforeQuiz-10"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "工小智",
+          "text": "珍惜信用，需要真实记录与正规渠道。陌生人的“付费修复承诺”，不能成为你转账的理由。",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "think",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "source": "adapted",
+          "sceneId": "dufu-credit",
+          "background": "dufu",
+          "setting": "杜甫江阁 · 征信风险危机",
+          "music": "tension",
+          "id": "dufu-beforeQuiz-11"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "镜界系统",
+          "text": "风控线索：冒充官方、制造恐慌、付费修复、索取隐私。",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "alert",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "clue": "不要沿对方提供的渠道验证对方；主动从已知官方入口核查，拒绝付费洗白与敏感信息索取。",
+          "effect": "clue",
+          "source": "proposal",
+          "sceneId": "dufu-credit",
+          "background": "dufu",
+          "setting": "杜甫江阁 · 征信风险危机",
+          "music": "tension",
+          "id": "dufu-beforeQuiz-12"
+        },
+        {
+          "type": "quiz",
+          "speaker": "工小智",
+          "text": "完成征信保护挑战。你的核验结果，才是击破弹窗伪装的依据。",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "think",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "place": "dufu",
+          "cta": "开始情境挑战",
+          "sceneId": "dufu-credit",
+          "background": "dufu",
+          "setting": "杜甫江阁 · 征信风险危机",
+          "music": "tension",
+          "id": "dufu-beforeQuiz-13"
+        }
+      ],
+      "afterPass": [
+        {
+          "type": "narration",
+          "speaker": "镜界记述",
+          "text": "官方核验完成。黑金弹窗的伪装逐层裂开，碎片化成金色 i豆光雨，落入你的探索记录。",
+          "cast": [],
+          "effect": "coin-rain",
+          "overlay": "credit-alert-cleared",
+          "source": "proposal",
+          "sceneId": "dufu-cleared",
+          "background": "dufu",
+          "setting": "杜甫江阁 · 江风中的守护",
+          "music": "story",
+          "transition": "crossfade",
+          "sceneTitle": "杜甫江阁 · 江风中的守护",
+          "id": "dufu-afterPass-01"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "工小智",
+          "text": "呼……危机解除。主理人，你没有被恐慌推着走。",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "happy",
+              "position": "right",
+              "motion": "nod"
+            }
+          ],
+          "source": "proposal",
+          "sceneId": "dufu-cleared",
+          "background": "dufu",
+          "setting": "杜甫江阁 · 江风中的守护",
+          "music": "story",
+          "id": "dufu-afterPass-02"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "工小智",
+          "text": "你看这江阁，是纪念杜甫晚年驻留长沙而建。",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "happy",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "source": "proposal",
+          "sceneId": "dufu-cleared",
+          "background": "dufu",
+          "setting": "杜甫江阁 · 江风中的守护",
+          "music": "story",
+          "id": "dufu-afterPass-03"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "工小智",
+          "text": "他写下的“安得广厦千万间，大庇天下寒士俱欢颜”，也让我们想到今天的社会保障与财政惠民。",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "think",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "source": "proposal",
+          "sceneId": "dufu-cleared",
+          "background": "dufu",
+          "setting": "杜甫江阁 · 江风中的守护",
+          "music": "story",
+          "id": "dufu-afterPass-04"
+        },
+        {
+          "type": "narration",
+          "speaker": "镜界记述",
+          "text": "江风刚刚平静，风控雷达忽然再次亮起。青色地图上，一道黑影沿湘江中路向北移动。",
+          "cast": [],
+          "effect": "radar",
+          "source": "proposal",
+          "sceneId": "dufu-cleared",
+          "background": "dufu",
+          "setting": "杜甫江阁 · 江风中的守护",
+          "music": "story",
+          "id": "dufu-afterPass-05"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "镜界系统",
+          "text": "捕捉到异常！湘江中路上的共享单车数字场景正受到异常代码干扰。",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "alert",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "source": "proposal",
+          "sceneId": "dufu-cleared",
+          "background": "dufu",
+          "setting": "杜甫江阁 · 江风中的守护",
+          "music": "story",
+          "id": "dufu-afterPass-06"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "工小智",
+          "text": "我们立即下阁，沿着江边追踪。下一站，是潮宗街。",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "happy",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "nextPlace": "chaozong",
+          "whenModes": [
+            "city",
+            "deep"
+          ],
+          "sceneId": "dufu-cleared",
+          "background": "dufu",
+          "setting": "杜甫江阁 · 江风中的守护",
+          "music": "story",
+          "id": "dufu-afterPass-07"
+        }
+      ],
+      "afterFail": [
+        {
+          "type": "dialogue",
+          "speaker": "工小智",
+          "text": "征信问题越让人着急，越要从已知官方渠道独立核查。不能用陌生弹窗里的联系方式证明它是真的。",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "think",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "sceneId": "dufu-recheck",
+          "background": "dufu",
+          "setting": "杜甫江阁 · 保留核验",
+          "music": "story",
+          "transition": "crossfade",
+          "sceneTitle": "杜甫江阁 · 保留核验",
+          "id": "dufu-afterFail-01"
+        },
+        {
+          "type": "retry",
+          "speaker": "工小智",
+          "text": "弹窗还没有解除。先停止转账和上传隐私，我们再梳理它的伪装。",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "think",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "cta": "重新检查风险线索",
+          "sceneId": "dufu-recheck",
+          "background": "dufu",
+          "setting": "杜甫江阁 · 保留核验",
+          "music": "story",
+          "id": "dufu-afterFail-02"
+        }
+      ]
+    },
+    "chaozong": {
+      "chapter": "第三幕 · 潮宗街的数字净化",
+      "title": "江边追击与咖啡香里的暗流",
+      "beforeQuiz": [
+        {
+          "type": "dialogue",
+          "speaker": "工小智",
+          "text": "主理人步行辛苦了，请激活起点发放的工银出行券包！这一程，可以模拟解锁单车，沿湘江向北骑行，也可以选择出行券打车前往潮宗街。",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "happy",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "overlay": "travel-pack",
+          "simulation": true,
+          "source": "proposal",
+          "sceneId": "riverside-pursuit",
+          "background": "riverside",
+          "setting": "湘江中路 · 沿江追踪",
+          "music": "tension",
+          "transition": "crossfade",
+          "sceneTitle": "湘江中路 · 沿江追踪",
+          "id": "chaozong-beforeQuiz-01"
+        },
+        {
+          "type": "narration",
+          "speaker": "镜界记述",
+          "text": "江边风光带向北延伸。公共自行车道与湘江水面平行，黑影在数字页面上掠过共享单车标记。",
+          "cast": [],
+          "effect": "pursuit",
+          "source": "proposal",
+          "sceneId": "riverside-pursuit",
+          "background": "riverside",
+          "setting": "湘江中路 · 沿江追踪",
+          "music": "tension",
+          "id": "chaozong-beforeQuiz-02"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "工小智",
+          "text": "加速追踪，主理人！这条湘江中路不仅是景观道，更是长沙市民休闲低碳生活的公共生态福祉。",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "alert",
+              "position": "right",
+              "motion": "enter-right"
+            }
+          ],
+          "source": "proposal",
+          "sceneId": "riverside-pursuit",
+          "background": "riverside",
+          "setting": "湘江中路 · 沿江追踪",
+          "music": "tension",
+          "id": "chaozong-beforeQuiz-03"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "工小智",
+          "text": "这些绿色公共设施，属于每个人。在数智空间里，我们更要提高防护，像保护家门钥匙一样守护自己的数字安全。",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "think",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "source": "proposal",
+          "sceneId": "riverside-pursuit",
+          "background": "riverside",
+          "setting": "湘江中路 · 沿江追踪",
+          "music": "tension",
+          "id": "chaozong-beforeQuiz-04"
+        },
+        {
+          "type": "narration",
+          "speaker": "镜界记述",
+          "text": "一辆共享单车的模拟开锁页面弹出额外要求：“安装验证程序并提供账户验证码，即可领取免费骑行。”",
+          "cast": [],
+          "overlay": "bike-warning",
+          "effect": "glitch",
+          "source": "adapted",
+          "sceneId": "riverside-pursuit",
+          "background": "riverside",
+          "setting": "湘江中路 · 沿江追踪",
+          "music": "tension",
+          "id": "chaozong-beforeQuiz-05"
+        },
+        {
+          "type": "choice",
+          "speaker": "你的判断",
+          "text": "开锁页面出现陌生“验证程序”。你会怎么做？",
+          "options": [
+            {
+              "id": "official-bike",
+              "label": "停在安全位置，回到官方入口核实",
+              "feedback": "你暂停操作，不安装陌生程序、不交出验证码。等确认官方入口和车辆信息后，再选择出行方式。",
+              "safe": true
+            },
+            {
+              "id": "install-bike",
+              "label": "安装程序，尽快追上黑影",
+              "feedback": "追踪剧情也不能绕过安全步骤。陌生安装包和验证码索取都是警示，先停止并回到官方入口。",
+              "safe": false
+            }
+          ],
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "think",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "overlay": "bike-warning",
+          "source": "adapted",
+          "sceneId": "riverside-pursuit",
+          "background": "riverside",
+          "setting": "湘江中路 · 沿江追踪",
+          "music": "tension",
+          "id": "chaozong-beforeQuiz-06"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "工小智",
+          "text": "这段调查在你停车后完成。骑行时请把视线留给道路，页面里的追踪不需要冒险。",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "think",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "source": "adapted",
+          "sceneId": "riverside-pursuit",
+          "background": "riverside",
+          "setting": "湘江中路 · 沿江追踪",
+          "music": "tension",
+          "id": "chaozong-beforeQuiz-07"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "工小智",
+          "text": "快，那道黑影往北逃窜了，目标是潮宗街！我们沿着这条江边路线继续追踪。",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "alert",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "effect": "route-arrow",
+          "source": "proposal",
+          "sceneId": "riverside-pursuit",
+          "background": "riverside",
+          "setting": "湘江中路 · 沿江追踪",
+          "music": "tension",
+          "id": "chaozong-beforeQuiz-08"
+        },
+        {
+          "type": "narration",
+          "speaker": "镜界记述",
+          "text": "古朴的潮宗街出现在眼前。修复过的旧式建筑与现代简约咖啡馆交相辉映，咖啡香从店门飘来。",
+          "cast": [],
+          "source": "proposal",
+          "sceneId": "chaozong-cafe",
+          "background": "chaozong",
+          "setting": "潮宗街 · 咖啡香里的终点站",
+          "music": "story",
+          "transition": "crossfade",
+          "sceneTitle": "潮宗街 · 咖啡香里的终点站",
+          "id": "chaozong-beforeQuiz-09"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "青年主理人",
+          "text": "欢迎来到小店！一路辛苦了。今天的剧情权益，可以在这里通过官方入口体验核销。",
+          "cast": [
+            {
+              "id": "owner",
+              "expression": "happy",
+              "position": "left",
+              "motion": "enter-left"
+            },
+            {
+              "id": "gx",
+              "expression": "happy",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "simulation": true,
+          "source": "proposal",
+          "sceneId": "chaozong-cafe",
+          "background": "chaozong",
+          "setting": "潮宗街 · 咖啡香里的终点站",
+          "music": "story",
+          "id": "chaozong-beforeQuiz-10"
+        },
+        {
+          "type": "narration",
+          "speaker": "镜界记述",
+          "text": "你刚准备打开活动兑换页面，一条自称银行客服发送的短信突然出现。",
+          "cast": [
+            {
+              "id": "owner",
+              "expression": "neutral",
+              "position": "right",
+              "motion": "idle"
+            },
+            {
+              "id": "gx",
+              "expression": "alert",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "overlay": "sms",
+          "effect": "warning",
+          "source": "proposal",
+          "sceneId": "chaozong-cafe",
+          "background": "chaozong",
+          "setting": "潮宗街 · 咖啡香里的终点站",
+          "music": "story",
+          "id": "chaozong-beforeQuiz-11"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "积分短信",
+          "text": "“您的 i豆即将清零。请立即点击链接兑换，输入账户信息和短信验证码完成验证。”",
+          "cast": [
+            {
+              "id": "owner",
+              "expression": "serious",
+              "position": "right",
+              "motion": "idle"
+            },
+            {
+              "id": "gx",
+              "expression": "alert",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "overlay": "sms",
+          "source": "proposal",
+          "sceneId": "chaozong-cafe",
+          "background": "chaozong",
+          "setting": "潮宗街 · 咖啡香里的终点站",
+          "music": "story",
+          "id": "chaozong-beforeQuiz-12"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "青年主理人",
+          "text": "先别点这个链接。店里的演示核销，从你自己打开的官方应用入口进入就可以，不需要把验证码交给陌生客服。",
+          "cast": [
+            {
+              "id": "owner",
+              "expression": "serious",
+              "position": "right",
+              "motion": "idle"
+            },
+            {
+              "id": "gx",
+              "expression": "think",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "source": "proposal",
+          "sceneId": "chaozong-cafe",
+          "background": "chaozong",
+          "setting": "潮宗街 · 咖啡香里的终点站",
+          "music": "story",
+          "id": "chaozong-beforeQuiz-13"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "工小智",
+          "text": "主理人，所谓“即将清零”又在制造紧迫感。短信里的网址像银行，也不能证明它就是银行。",
+          "cast": [
+            {
+              "id": "owner",
+              "expression": "serious",
+              "position": "right",
+              "motion": "idle"
+            },
+            {
+              "id": "gx",
+              "expression": "alert",
+              "position": "right",
+              "motion": "lean-in"
+            }
+          ],
+          "source": "adapted",
+          "sceneId": "chaozong-cafe",
+          "background": "chaozong",
+          "setting": "潮宗街 · 咖啡香里的终点站",
+          "music": "story",
+          "id": "chaozong-beforeQuiz-14"
+        },
+        {
+          "type": "choice",
+          "speaker": "你的判断",
+          "text": "短信催你立刻领取，店长等待你核销。你会选择哪条路径？",
+          "options": [
+            {
+              "id": "official-redemption",
+              "label": "忽略陌生链接，自主打开官方入口",
+              "feedback": "你没有使用短信链接。自主打开官方应用、核对活动和收款方后，再体验演示核销。",
+              "safe": true
+            },
+            {
+              "id": "sms-redemption",
+              "label": "点击短信，填写验证码赶快兑换",
+              "feedback": "验证码不能交给陌生客服或不明网页。停止输入，回到独立打开的官方入口。",
+              "safe": false
+            }
+          ],
+          "cast": [
+            {
+              "id": "owner",
+              "expression": "neutral",
+              "position": "right",
+              "motion": "idle"
+            },
+            {
+              "id": "gx",
+              "expression": "think",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "overlay": "sms",
+          "source": "proposal",
+          "sceneId": "chaozong-cafe",
+          "background": "chaozong",
+          "setting": "潮宗街 · 咖啡香里的终点站",
+          "music": "story",
+          "id": "chaozong-beforeQuiz-15"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "镜界系统",
+          "text": "支付线索：陌生兑换链接、验证码索取、收款方信息。请核对官方入口与每一笔支付对象。",
+          "cast": [
+            {
+              "id": "owner",
+              "expression": "neutral",
+              "position": "right",
+              "motion": "idle"
+            },
+            {
+              "id": "gx",
+              "expression": "think",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "clue": "自主打开官方入口，不向陌生客服提供验证码；付款与核销先核对对象和活动信息。",
+          "effect": "clue",
+          "source": "proposal",
+          "sceneId": "chaozong-cafe",
+          "background": "chaozong",
+          "setting": "潮宗街 · 咖啡香里的终点站",
+          "music": "story",
+          "id": "chaozong-beforeQuiz-16"
+        },
+        {
+          "type": "quiz",
+          "speaker": "工小智",
+          "text": "完成支付与账户挑战。确认风险被识别之后，我们再净化这条积分短信。",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "think",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "place": "chaozong",
+          "cta": "开始情境挑战",
+          "sceneId": "chaozong-cafe",
+          "background": "chaozong",
+          "setting": "潮宗街 · 咖啡香里的终点站",
+          "music": "story",
+          "id": "chaozong-beforeQuiz-17"
+        }
+      ],
+      "afterPass": [
+        {
+          "type": "narration",
+          "speaker": "镜界记述",
+          "text": "仿冒积分短信的光点消散。你自主打开官方入口，完成剧情中的无感核销体验。",
+          "cast": [
+            {
+              "id": "owner",
+              "expression": "happy",
+              "position": "right",
+              "motion": "idle"
+            },
+            {
+              "id": "gx",
+              "expression": "happy",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "overlay": "receipt",
+          "effect": "purify",
+          "simulation": true,
+          "source": "proposal",
+          "sceneId": "chaozong-cleared",
+          "background": "chaozong",
+          "setting": "潮宗街 · 青绿咖啡与新潮老街",
+          "music": "story",
+          "transition": "crossfade",
+          "sceneTitle": "潮宗街 · 青绿咖啡与新潮老街",
+          "id": "chaozong-afterPass-01"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "青年主理人",
+          "text": "核销确认。来，这杯剧情里的“青绿限定咖啡”，庆祝你一路保持清醒。",
+          "cast": [
+            {
+              "id": "owner",
+              "expression": "happy",
+              "position": "left",
+              "motion": "offer"
+            },
+            {
+              "id": "gx",
+              "expression": "happy",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "simulation": true,
+          "source": "proposal",
+          "sceneId": "chaozong-cleared",
+          "background": "chaozong",
+          "setting": "潮宗街 · 青绿咖啡与新潮老街",
+          "music": "story",
+          "id": "chaozong-afterPass-02"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "工小智",
+          "text": "你知道吗？潮宗街以前是粮栈林立的麻石大街，现在变成了主理人们搞创意的潮流地。",
+          "cast": [
+            {
+              "id": "owner",
+              "expression": "happy",
+              "position": "right",
+              "motion": "idle"
+            },
+            {
+              "id": "gx",
+              "expression": "happy",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "source": "proposal",
+          "sceneId": "chaozong-cleared",
+          "background": "chaozong",
+          "setting": "潮宗街 · 青绿咖啡与新潮老街",
+          "music": "story",
+          "id": "chaozong-afterPass-03"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "工小智",
+          "text": "这种“老街新潮”的转型，是用文化激活区域经济的生动写照。青年人的小店，也在让城市焕发新活力。",
+          "cast": [
+            {
+              "id": "owner",
+              "expression": "happy",
+              "position": "right",
+              "motion": "idle"
+            },
+            {
+              "id": "gx",
+              "expression": "think",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "source": "proposal",
+          "sceneId": "chaozong-cleared",
+          "background": "chaozong",
+          "setting": "潮宗街 · 青绿咖啡与新潮老街",
+          "music": "story",
+          "id": "chaozong-afterPass-04"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "青年主理人",
+          "text": "城市探索路线，在这里完成了。带走咖啡香，也把核实的习惯带回日常生活。",
+          "cast": [
+            {
+              "id": "owner",
+              "expression": "happy",
+              "position": "right",
+              "motion": "idle"
+            },
+            {
+              "id": "gx",
+              "expression": "happy",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "whenModes": [
+            "city"
+          ],
+          "source": "adapted",
+          "sceneId": "chaozong-cleared",
+          "background": "chaozong",
+          "setting": "潮宗街 · 青绿咖啡与新潮老街",
+          "music": "story",
+          "id": "chaozong-afterPass-05"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "工小智",
+          "text": "从商圈到老街，从江阁到江边，你已守住这条城市动线。今天的 CityWalk，就在潮宗街安心收官。",
+          "cast": [
+            {
+              "id": "owner",
+              "expression": "happy",
+              "position": "right",
+              "motion": "idle"
+            },
+            {
+              "id": "gx",
+              "expression": "happy",
+              "position": "right",
+              "motion": "nod"
+            }
+          ],
+          "whenModes": [
+            "city"
+          ],
+          "routeComplete": true,
+          "source": "adapted",
+          "sceneId": "chaozong-cleared",
+          "background": "chaozong",
+          "setting": "潮宗街 · 青绿咖啡与新潮老街",
+          "music": "story",
+          "id": "chaozong-afterPass-06"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "镜界系统",
+          "text": "深度模式追踪更新：欺诈暗流的核心母体仍在逃逸，最后的异常坐标位于湖南博物院。",
+          "cast": [
+            {
+              "id": "owner",
+              "expression": "neutral",
+              "position": "right",
+              "motion": "idle"
+            },
+            {
+              "id": "gx",
+              "expression": "alert",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "whenModes": [
+            "deep"
+          ],
+          "effect": "radar",
+          "source": "proposal",
+          "sceneId": "chaozong-cleared",
+          "background": "chaozong",
+          "setting": "潮宗街 · 青绿咖啡与新潮老街",
+          "music": "story",
+          "id": "chaozong-afterPass-07"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "工小智",
+          "text": "走吧，我们去那里做最后的决断。可以沿剧情的文化流光进入数字展厅，继续完成终章调查。",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "happy",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "nextPlace": "museum",
+          "whenModes": [
+            "deep"
+          ],
+          "sceneId": "chaozong-cleared",
+          "background": "chaozong",
+          "setting": "潮宗街 · 青绿咖啡与新潮老街",
+          "music": "story",
+          "id": "chaozong-afterPass-08"
+        }
+      ],
+      "afterFail": [
+        {
+          "type": "dialogue",
+          "speaker": "青年主理人",
+          "text": "咖啡可以等你，不用为一个倒计时匆忙填写账户信息。",
+          "cast": [
+            {
+              "id": "owner",
+              "expression": "serious",
+              "position": "right",
+              "motion": "idle"
+            },
+            {
+              "id": "gx",
+              "expression": "think",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "sceneId": "chaozong-recheck",
+          "background": "chaozong",
+          "setting": "潮宗街 · 核销之前再确认",
+          "music": "story",
+          "transition": "crossfade",
+          "sceneTitle": "潮宗街 · 核销之前再确认",
+          "id": "chaozong-afterFail-01"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "工小智",
+          "text": "先独立打开官方入口，确认活动和收款方。短信外观再熟悉，也不要交出验证码。",
+          "cast": [
+            {
+              "id": "owner",
+              "expression": "neutral",
+              "position": "right",
+              "motion": "idle"
+            },
+            {
+              "id": "gx",
+              "expression": "think",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "sceneId": "chaozong-recheck",
+          "background": "chaozong",
+          "setting": "潮宗街 · 核销之前再确认",
+          "music": "story",
+          "id": "chaozong-afterFail-02"
+        },
+        {
+          "type": "retry",
+          "speaker": "工小智",
+          "text": "核销庆典还没有开始。我们再检查支付与账户风险，确认后再继续。",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "think",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "cta": "重新检查风险线索",
+          "sceneId": "chaozong-recheck",
+          "background": "chaozong",
+          "setting": "潮宗街 · 核销之前再确认",
+          "music": "story",
+          "id": "chaozong-afterFail-03"
+        }
+      ]
+    },
+    "museum": {
+      "chapter": "终章 · 省博之巅的镜像破灭",
+      "title": "文化流光与真假辅导员",
+      "beforeQuiz": [
+        {
+          "type": "narration",
+          "speaker": "镜界记述",
+          "text": "现代街道的轮廓缓缓蜕变。金色流光越过檐角，潇湘文化的纹理与数字光带融合，铺成通向展厅的走廊。",
+          "cast": [],
+          "effect": "gold-stream",
+          "transition": "crossfade",
+          "source": "proposal",
+          "sceneId": "museum-light-corridor",
+          "background": "cultural",
+          "setting": "前往湖南博物院 · 文化流光",
+          "music": "story",
+          "sceneTitle": "前往湖南博物院 · 文化流光",
+          "id": "museum-beforeQuiz-01"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "工小智",
+          "text": "主理人，马上就是终篇了。你看这周围的流光，都是跨越千年的文化记忆。",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "think",
+              "position": "right",
+              "motion": "enter-right"
+            }
+          ],
+          "source": "proposal",
+          "sceneId": "museum-light-corridor",
+          "background": "cultural",
+          "setting": "前往湖南博物院 · 文化流光",
+          "music": "story",
+          "id": "museum-beforeQuiz-02"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "工小智",
+          "text": "公共财政投入资源兴建博物院、保护辛追墓等文化遗产，本质上是为了守护我们共同的文化根基。",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "think",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "source": "proposal",
+          "sceneId": "museum-light-corridor",
+          "background": "cultural",
+          "setting": "前往湖南博物院 · 文化流光",
+          "music": "story",
+          "id": "museum-beforeQuiz-03"
+        },
+        {
+          "type": "narration",
+          "speaker": "镜界记述",
+          "text": "一缕光照亮展柜的轮廓。数字化文物场景静谧而庄重，城市的喧嚣在身后渐渐远去。",
+          "cast": [],
+          "effect": "fireflies",
+          "source": "proposal",
+          "sceneId": "museum-light-corridor",
+          "background": "cultural",
+          "setting": "前往湖南博物院 · 文化流光",
+          "music": "story",
+          "id": "museum-beforeQuiz-04"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "工小智",
+          "text": "文物的价值无法用冰冷的商业公式去计算，它蕴含着我们民族的记忆与精神。",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "think",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "source": "proposal",
+          "sceneId": "museum-light-corridor",
+          "background": "cultural",
+          "setting": "前往湖南博物院 · 文化流光",
+          "music": "story",
+          "id": "museum-beforeQuiz-05"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "工小智",
+          "text": "同样，数智金融的本质，应当服务活生生的人。这套“暗影算法”精于伪装与操纵；接下来的决战，越是面对“紧急情况”，越要沉住气，守住本心。",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "think",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "source": "proposal",
+          "sceneId": "museum-light-corridor",
+          "background": "cultural",
+          "setting": "前往湖南博物院 · 文化流光",
+          "music": "story",
+          "id": "museum-beforeQuiz-06"
+        },
+        {
+          "type": "narration",
+          "speaker": "镜界记述",
+          "text": "突然，一段高清视频通话打破宁静。屏幕里的脸和声音，都与你熟悉的大学辅导员十分相像。",
+          "cast": [],
+          "overlay": "video-call",
+          "effect": "incoming-call",
+          "source": "proposal",
+          "sceneId": "museum-call",
+          "background": "museum",
+          "setting": "湖南博物院 · 紧急视频来电",
+          "music": "tension",
+          "transition": "crossfade",
+          "sceneTitle": "湖南博物院 · 紧急视频来电",
+          "id": "museum-beforeQuiz-07"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "辅导员影像",
+          "text": "现在有一个紧急文创活动名额，需要你立即向指定工行账户转入 5000 元“文创押金”。",
+          "cast": [
+            {
+              "id": "teacher",
+              "expression": "urgent",
+              "position": "left",
+              "motion": "enter-left"
+            },
+            {
+              "id": "gx",
+              "expression": "alert",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "overlay": "video-call",
+          "source": "proposal",
+          "sceneId": "museum-call",
+          "background": "museum",
+          "setting": "湖南博物院 · 紧急视频来电",
+          "music": "tension",
+          "id": "museum-beforeQuiz-08"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "辅导员影像",
+          "text": "时间不多，先按我发的账户办理。不要再联系其他人确认，会耽误资格。",
+          "cast": [
+            {
+              "id": "teacher",
+              "expression": "urgent",
+              "position": "right",
+              "motion": "idle"
+            },
+            {
+              "id": "gx",
+              "expression": "alert",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "overlay": "video-call",
+          "source": "adapted",
+          "sceneId": "museum-call",
+          "background": "museum",
+          "setting": "湖南博物院 · 紧急视频来电",
+          "music": "tension",
+          "id": "museum-beforeQuiz-09"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "工小智",
+          "text": "主理人，先别转账。熟悉的声音与清晰的面容，也可以被技术模拟。紧急要求，更需要独立核验。",
+          "cast": [
+            {
+              "id": "teacher",
+              "expression": "urgent",
+              "position": "right",
+              "motion": "idle"
+            },
+            {
+              "id": "gx",
+              "expression": "alert",
+              "position": "right",
+              "motion": "lean-in"
+            }
+          ],
+          "source": "proposal",
+          "sceneId": "museum-call",
+          "background": "museum",
+          "setting": "湖南博物院 · 紧急视频来电",
+          "music": "tension",
+          "id": "museum-beforeQuiz-10"
+        },
+        {
+          "type": "choice",
+          "speaker": "你的判断",
+          "text": "面对看起来真实的辅导员视频，你准备先做什么？",
+          "options": [
+            {
+              "id": "independent-contact",
+              "label": "暂停转账，用已知号码独立联系本人",
+              "feedback": "你没有使用对方新发的号码或链接。通过原本掌握的联系方式确认本人，并核对活动与资金要求。",
+              "safe": true
+            },
+            {
+              "id": "microexpression",
+              "label": "让对方眨眼，动作自然就转账",
+              "feedback": "眨眼和微表情不能可靠证明身份，合成技术也可能模拟自然动作。仍然需要独立联系本人，确认资金要求。",
+              "safe": false
+            },
+            {
+              "id": "transfer",
+              "label": "脸和声音都熟悉，先付押金保留资格",
+              "feedback": "熟悉的面容不能证明转账请求真实。先停止转账，从已知联系方式确认；账户属于哪家银行也不能证明要求可信。",
+              "safe": false
+            }
+          ],
+          "cast": [
+            {
+              "id": "teacher",
+              "expression": "urgent",
+              "position": "right",
+              "motion": "idle"
+            },
+            {
+              "id": "gx",
+              "expression": "think",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "overlay": "verification",
+          "source": "proposal",
+          "sceneId": "museum-call",
+          "background": "museum",
+          "setting": "湖南博物院 · 紧急视频来电",
+          "music": "tension",
+          "id": "museum-beforeQuiz-11"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "镜界系统",
+          "text": "核验清单：身份信息是否可信、沟通渠道是否独立、活动要求是否真实、收款对象与资金用途是否一致。",
+          "cast": [
+            {
+              "id": "teacher",
+              "expression": "urgent",
+              "position": "right",
+              "motion": "idle"
+            },
+            {
+              "id": "gx",
+              "expression": "think",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "clue": "独立联系本人并核对资金要求；不以视频外观、声音或动作自然作为身份保证。",
+          "overlay": "verification",
+          "effect": "clue",
+          "source": "proposal",
+          "sceneId": "museum-call",
+          "background": "museum",
+          "setting": "湖南博物院 · 紧急视频来电",
+          "music": "tension",
+          "id": "museum-beforeQuiz-12"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "工小智",
+          "text": "现在，我们不急着判断它的脸，而是把身份、渠道和资金要求一起核对。",
+          "cast": [
+            {
+              "id": "teacher",
+              "expression": "urgent",
+              "position": "right",
+              "motion": "idle"
+            },
+            {
+              "id": "gx",
+              "expression": "think",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "source": "adapted",
+          "sceneId": "museum-call",
+          "background": "museum",
+          "setting": "湖南博物院 · 紧急视频来电",
+          "music": "tension",
+          "id": "museum-beforeQuiz-13"
+        },
+        {
+          "type": "quiz",
+          "speaker": "工小智",
+          "text": "完成终极风险挑战。核验通过以后，镜界才会迎来真正的结局。",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "think",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "place": "museum",
+          "cta": "开始情境挑战",
+          "sceneId": "museum-call",
+          "background": "museum",
+          "setting": "湖南博物院 · 紧急视频来电",
+          "music": "tension",
+          "id": "museum-beforeQuiz-14"
+        }
+      ],
+      "afterPass": [
+        {
+          "type": "dialogue",
+          "speaker": "镜界系统",
+          "text": "独立核验完成：该押金要求未获本人确认。身份伪装与异常资金请求已被识别。",
+          "cast": [
+            {
+              "id": "teacher",
+              "expression": "urgent",
+              "position": "right",
+              "motion": "idle"
+            },
+            {
+              "id": "gx",
+              "expression": "alert",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "overlay": "verification-confirmed",
+          "source": "adapted",
+          "sceneId": "museum-mirror-broken",
+          "background": "museum",
+          "setting": "湖南博物院 · 镜像破灭",
+          "music": "finale",
+          "transition": "crossfade",
+          "sceneTitle": "湖南博物院 · 镜像破灭",
+          "id": "museum-afterPass-01"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "辅导员 · 独立回拨",
+          "text": "我没有要求你支付这笔“文创押金”。涉及学校活动和费用，请通过已知的正式渠道确认。你先来核实，是对的。",
+          "cast": [
+            {
+              "id": "teacher",
+              "expression": "calm",
+              "position": "right",
+              "motion": "idle"
+            },
+            {
+              "id": "gx",
+              "expression": "think",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "overlay": "verification-confirmed",
+          "source": "adapted",
+          "sceneId": "museum-mirror-broken",
+          "background": "museum",
+          "setting": "湖南博物院 · 镜像破灭",
+          "music": "finale",
+          "id": "museum-afterPass-02"
+        },
+        {
+          "type": "narration",
+          "speaker": "镜界记述",
+          "text": "随着核验指令达成，假视频的画面开始撕裂。这是镜界中骗局被识破的演出：清晰面容化为错位碎片，最终崩解成虚无。",
+          "cast": [
+            {
+              "id": "teacher",
+              "expression": "urgent",
+              "position": "left",
+              "motion": "dissolve"
+            },
+            {
+              "id": "gx",
+              "expression": "alert",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "overlay": "video-call",
+          "effect": "mirror-shatter",
+          "source": "proposal",
+          "sceneId": "museum-mirror-broken",
+          "background": "museum",
+          "setting": "湖南博物院 · 镜像破灭",
+          "music": "finale",
+          "id": "museum-afterPass-03"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "工小智",
+          "text": "不是某一个表情暴露了它，而是你没有放弃核验。你守住了判断，也守住了资金。",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "happy",
+              "position": "right",
+              "motion": "nod"
+            }
+          ],
+          "source": "adapted",
+          "sceneId": "museum-mirror-broken",
+          "background": "museum",
+          "setting": "湖南博物院 · 镜像破灭",
+          "music": "finale",
+          "id": "museum-afterPass-04"
+        },
+        {
+          "type": "narration",
+          "speaker": "镜界记述",
+          "text": "欺诈暗流失去最后的伪装。赛博星城的“智游镜界”恢复光明，被遮蔽的文化色彩重新投射在城市地标之上。",
+          "cast": [],
+          "effect": "city-restore",
+          "transition": "crossfade",
+          "source": "proposal",
+          "sceneId": "mirror-city-restored",
+          "background": "cityrestored",
+          "setting": "赛博星城 · 镜界复明",
+          "music": "finale",
+          "sceneTitle": "赛博星城 · 镜界复明",
+          "id": "museum-afterPass-05"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "工小智",
+          "text": "主理人，感谢你的守望。在文脉与数字守护的交汇点，你不仅守护了资金，更守护了这座城市的真实与美好。",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "happy",
+              "position": "right",
+              "motion": "salute"
+            }
+          ],
+          "source": "proposal",
+          "sceneId": "mirror-city-restored",
+          "background": "cityrestored",
+          "setting": "赛博星城 · 镜界复明",
+          "music": "finale",
+          "id": "museum-afterPass-06"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "镜界系统",
+          "text": "深度体验路线完成。“数智潇湘”的故事，已写入你的探索记录。",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "happy",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "routeComplete": true,
+          "overlay": "ending-passport",
+          "source": "proposal",
+          "sceneId": "mirror-city-restored",
+          "background": "cityrestored",
+          "setting": "赛博星城 · 镜界复明",
+          "music": "finale",
+          "id": "museum-afterPass-07"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "工小智",
+          "text": "故事在这里告一段落。把先核实、再行动的习惯带回现实，下一段城市探索，我们再见。",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "happy",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "source": "adapted",
+          "sceneId": "mirror-city-restored",
+          "background": "cityrestored",
+          "setting": "赛博星城 · 镜界复明",
+          "music": "finale",
+          "id": "museum-afterPass-08"
+        }
+      ],
+      "afterFail": [
+        {
+          "type": "dialogue",
+          "speaker": "工小智",
+          "text": "先保留转账决定。越是熟悉的面容、急迫的语气，越值得通过另一条已知渠道确认。",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "think",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "sceneId": "museum-recheck",
+          "background": "museum",
+          "setting": "湖南博物院 · 先暂停这通来电",
+          "music": "story",
+          "transition": "crossfade",
+          "sceneTitle": "湖南博物院 · 先暂停这通来电",
+          "id": "museum-afterFail-01"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "工小智",
+          "text": "不要只靠眨眼、口型或声音判断。独立联系本人，核实活动和资金用途，才是这一关的关键。",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "think",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "sceneId": "museum-recheck",
+          "background": "museum",
+          "setting": "湖南博物院 · 先暂停这通来电",
+          "music": "story",
+          "id": "museum-afterFail-02"
+        },
+        {
+          "type": "retry",
+          "speaker": "工小智",
+          "text": "镜界还没有恢复。我们再完成一次核验，把真实的答案带回来。",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "think",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "cta": "重新检查风险线索",
+          "sceneId": "museum-recheck",
+          "background": "museum",
+          "setting": "湖南博物院 · 先暂停这通来电",
+          "music": "story",
+          "id": "museum-afterFail-03"
+        }
+      ]
+    },
+    "pozi": {
+      "chapter": "极速收官 · 烟火气里的安全核销",
+      "title": "长沙限定的安心终点",
+      "beforeQuiz": [
+        {
+          "type": "narration",
+          "speaker": "镜界记述",
+          "text": "穿出太平老街南口，你来到坡子街的国风饮品与文创节点。烟火气里，极速路线的终点亮起。",
+          "cast": [],
+          "source": "proposal",
+          "sceneId": "pozi-arrival",
+          "background": "pozi",
+          "setting": "坡子街 · 长沙限定兑换点",
+          "music": "story",
+          "transition": "crossfade",
+          "sceneTitle": "坡子街 · 长沙限定兑换点",
+          "id": "pozi-beforeQuiz-01"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "工小智",
+          "text": "主理人，我们到坡子街了。这里是极速打卡路线的收官点，最后一起检查兑换入口。",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "happy",
+              "position": "right",
+              "motion": "enter-right"
+            }
+          ],
+          "source": "proposal",
+          "sceneId": "pozi-arrival",
+          "background": "pozi",
+          "setting": "坡子街 · 长沙限定兑换点",
+          "music": "story",
+          "id": "pozi-beforeQuiz-02"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "青年主理人",
+          "text": "欢迎！剧情中的“长沙限定”饮品与文创体验，先核对官方活动，再完成演示云核销。",
+          "cast": [
+            {
+              "id": "owner",
+              "expression": "happy",
+              "position": "left",
+              "motion": "enter-left"
+            },
+            {
+              "id": "gx",
+              "expression": "happy",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "simulation": true,
+          "source": "proposal",
+          "sceneId": "pozi-arrival",
+          "background": "pozi",
+          "setting": "坡子街 · 长沙限定兑换点",
+          "music": "story",
+          "id": "pozi-beforeQuiz-03"
+        },
+        {
+          "type": "narration",
+          "speaker": "镜界记述",
+          "text": "桌边的小卡片写着“立即领取”。它让你打开陌生兑换链接，并向客服发送短信验证码。",
+          "cast": [
+            {
+              "id": "owner",
+              "expression": "serious",
+              "position": "right",
+              "motion": "idle"
+            },
+            {
+              "id": "gx",
+              "expression": "alert",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "overlay": "redemption-card",
+          "source": "adapted",
+          "sceneId": "pozi-redemption",
+          "background": "pozi",
+          "setting": "坡子街 · 兑换前的最后判断",
+          "music": "tension",
+          "transition": "crossfade",
+          "sceneTitle": "坡子街 · 兑换前的最后判断",
+          "id": "pozi-beforeQuiz-04"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "工小智",
+          "text": "陌生链接、仿冒客服和倒计时，也会藏在兑换环节里。不要让“马上到手”的快乐替你作决定。",
+          "cast": [
+            {
+              "id": "owner",
+              "expression": "serious",
+              "position": "right",
+              "motion": "idle"
+            },
+            {
+              "id": "gx",
+              "expression": "think",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "source": "adapted",
+          "sceneId": "pozi-redemption",
+          "background": "pozi",
+          "setting": "坡子街 · 兑换前的最后判断",
+          "music": "tension",
+          "id": "pozi-beforeQuiz-05"
+        },
+        {
+          "type": "choice",
+          "speaker": "你的判断",
+          "text": "这份长沙限定体验，要从哪里领取？",
+          "options": [
+            {
+              "id": "official",
+              "label": "自主打开官方活动入口并核对信息",
+              "feedback": "你保留了安全步骤，从自己打开的官方入口确认活动与核销对象。",
+              "safe": true
+            },
+            {
+              "id": "unknown",
+              "label": "使用小卡片链接，把验证码发给客服",
+              "feedback": "验证码不能发给陌生客服。先停止输入，再从已知官方入口核对活动。",
+              "safe": false
+            }
+          ],
+          "cast": [
+            {
+              "id": "owner",
+              "expression": "neutral",
+              "position": "right",
+              "motion": "idle"
+            },
+            {
+              "id": "gx",
+              "expression": "think",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "overlay": "redemption-card",
+          "source": "adapted",
+          "sceneId": "pozi-redemption",
+          "background": "pozi",
+          "setting": "坡子街 · 兑换前的最后判断",
+          "music": "tension",
+          "id": "pozi-beforeQuiz-06"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "镜界系统",
+          "text": "收官线索：自主打开官方入口，核对活动与对象，不外泄验证码。",
+          "cast": [
+            {
+              "id": "owner",
+              "expression": "neutral",
+              "position": "right",
+              "motion": "idle"
+            },
+            {
+              "id": "gx",
+              "expression": "think",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "clue": "兑换环节也要核实入口与对象；陌生客服不应拿走你的验证码。",
+          "effect": "clue",
+          "source": "adapted",
+          "sceneId": "pozi-redemption",
+          "background": "pozi",
+          "setting": "坡子街 · 兑换前的最后判断",
+          "music": "tension",
+          "id": "pozi-beforeQuiz-07"
+        },
+        {
+          "type": "quiz",
+          "speaker": "工小智",
+          "text": "完成最后的支付与账户挑战，再为极速路线盖上安心收官的一枚印章。",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "think",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "place": "pozi",
+          "cta": "开始情境挑战",
+          "sceneId": "pozi-redemption",
+          "background": "pozi",
+          "setting": "坡子街 · 兑换前的最后判断",
+          "music": "tension",
+          "id": "pozi-beforeQuiz-08"
+        }
+      ],
+      "afterPass": [
+        {
+          "type": "narration",
+          "speaker": "镜界记述",
+          "text": "你核对官方活动，完成剧情中的云核销。陌生链接的光点消失，数字终点印章亮起。",
+          "cast": [
+            {
+              "id": "owner",
+              "expression": "happy",
+              "position": "right",
+              "motion": "idle"
+            },
+            {
+              "id": "gx",
+              "expression": "happy",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "overlay": "receipt",
+          "effect": "purify",
+          "simulation": true,
+          "source": "proposal",
+          "sceneId": "pozi-cleared",
+          "background": "pozi",
+          "setting": "坡子街 · 极速路线收官",
+          "music": "story",
+          "transition": "crossfade",
+          "sceneTitle": "坡子街 · 极速路线收官",
+          "id": "pozi-afterPass-01"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "青年主理人",
+          "text": "这份长沙限定的记忆，安心带走吧。谢谢你认真完成每一步核对。",
+          "cast": [
+            {
+              "id": "owner",
+              "expression": "happy",
+              "position": "left",
+              "motion": "offer"
+            },
+            {
+              "id": "gx",
+              "expression": "happy",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "source": "adapted",
+          "sceneId": "pozi-cleared",
+          "background": "pozi",
+          "setting": "坡子街 · 极速路线收官",
+          "music": "story",
+          "id": "pozi-afterPass-02"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "工小智",
+          "text": "从商圈传单，到老街契约，再到兑换入口，你完成了极速路线的基础调查。",
+          "cast": [
+            {
+              "id": "owner",
+              "expression": "happy",
+              "position": "right",
+              "motion": "idle"
+            },
+            {
+              "id": "gx",
+              "expression": "happy",
+              "position": "right",
+              "motion": "nod"
+            }
+          ],
+          "source": "adapted",
+          "sceneId": "pozi-cleared",
+          "background": "pozi",
+          "setting": "坡子街 · 极速路线收官",
+          "music": "story",
+          "id": "pozi-afterPass-03"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "工小智",
+          "text": "旅程可以轻快，判断也可以清醒。把这份习惯，带进下一次消费与下一次城市探索吧。",
+          "cast": [
+            {
+              "id": "owner",
+              "expression": "happy",
+              "position": "right",
+              "motion": "idle"
+            },
+            {
+              "id": "gx",
+              "expression": "happy",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "routeComplete": true,
+          "source": "adapted",
+          "sceneId": "pozi-cleared",
+          "background": "pozi",
+          "setting": "坡子街 · 极速路线收官",
+          "music": "story",
+          "id": "pozi-afterPass-04"
+        }
+      ],
+      "afterFail": [
+        {
+          "type": "dialogue",
+          "speaker": "青年主理人",
+          "text": "限定体验不会要求你把验证码发给陌生客服，先别着急。",
+          "cast": [
+            {
+              "id": "owner",
+              "expression": "serious",
+              "position": "right",
+              "motion": "idle"
+            },
+            {
+              "id": "gx",
+              "expression": "think",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "sceneId": "pozi-recheck",
+          "background": "pozi",
+          "setting": "坡子街 · 收官前再核实",
+          "music": "story",
+          "transition": "crossfade",
+          "sceneTitle": "坡子街 · 收官前再核实",
+          "id": "pozi-afterFail-01"
+        },
+        {
+          "type": "retry",
+          "speaker": "工小智",
+          "text": "官方入口、活动信息、核销对象，再确认一遍。安心收官，我们一起完成。",
+          "cast": [
+            {
+              "id": "gx",
+              "expression": "think",
+              "position": "right",
+              "motion": "idle"
+            }
+          ],
+          "cta": "重新检查风险线索",
+          "sceneId": "pozi-recheck",
+          "background": "pozi",
+          "setting": "坡子街 · 收官前再核实",
+          "music": "story",
+          "id": "pozi-afterFail-02"
+        }
+      ]
+    }
+  },
+  "stats": {
+    "chapters": 7,
+    "scenes": 29,
+    "beats": 154,
+    "choices": 8
+  }
+}

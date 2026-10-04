@@ -5,8 +5,9 @@ import BankHome from './components/BankHome.vue'
 import BankLaunch from './components/BankLaunch.vue'
 import { pauseAudio, setScene } from './audio'
 
-const projectPages = new Set(['home', 'map', 'story', 'classroom', 'avatar', 'rewards', 'community', 'profile'])
+const projectPages = new Set(['home', 'map', 'story', 'avatar', 'rewards', 'community', 'profile'])
 const hash = () => location.hash.slice(1)
+if (hash() === 'classroom') history.replaceState(null, '', `${location.pathname}${location.search}#story`)
 const stage = ref(projectPages.has(hash()) ? 'project' : 'splash')
 
 function showBank({ replace = false } = {}) {
@@ -24,6 +25,7 @@ function enterProject() {
   window.scrollTo({ top: 0, behavior: 'instant' })
 }
 function followLocation() {
+  if (hash() === 'classroom') { location.hash = 'story'; return }
   if (projectPages.has(hash())) {
     if (stage.value !== 'project') setScene('explore')
     stage.value = 'project'

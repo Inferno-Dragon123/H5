@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#102629">
+    <title>智游镜界 · 城市视觉小说</title>
+    <link rel="stylesheet" href="./vendor/monogatari.css">
+    <link rel="stylesheet" href="./theme.css">
+    <script defer src="./vendor/monogatari.js"></script>
+    <script defer src="./runtime.js"></script>
+  </head>
+  <body>
+    <div id="monogatari">
+      <visual-novel>
+        <loading-screen></loading-screen>
+        <main-screen><main-menu></main-menu></main-screen>
+        <game-screen>
+          <dialog-log></dialog-log>
+          <text-box></text-box>
+          <quick-menu></quick-menu>
+        </game-screen>
+        <load-screen></load-screen>
+        <save-screen></save-screen>
+        <settings-screen></settings-screen>
+        <help-screen></help-screen>
+      </visual-novel>
+    </div>
+    <div id="scene-caption" aria-live="polite"></div>
+    <div id="evidence-stage"></div>
+    <div id="scene-effects" aria-hidden="true"></div>
+    <div id="clue-caption" aria-live="polite"></div>
+    <div id="novel-error" hidden>
+      <p class="error-kicker">SCENE UNAVAILABLE</p>
+      <h1>这一幕暂时没有载入</h1>
+      <p id="novel-error-message"></p>
+      <button id="novel-retry">重新载入场景</button>
+    </div>
+    <noscript>请启用 JavaScript 后继续阅读。</noscript>
+  </body>
+</html>
