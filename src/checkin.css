@@ -1,0 +1,5 @@
+.map-navigation-link{justify-content:center;margin:15px auto 0;font-size:11px;min-height:32px}
+.certificate-return{margin-top:15px;font-size:11px}.saved-certificate-list{display:grid;gap:10px;margin:24px 0}
+.saved-certificate{display:flex;align-items:center;gap:14px;width:100%;padding:17px;background:#f3f7f2;border:1px solid #e1e9df;border-radius:11px;text-align:left;color:#314f49}
+.saved-certificate>span:nth-child(2){flex:1;min-width:0}.saved-certificate b{display:block;font-size:14px}.saved-certificate small{display:block;font-size:10px;color:#7b8e87;margin-top:6px}.saved-certificate em{display:block;font-size:9px;color:#91a39b;margin-top:5px;font-style:normal}.certificate-list-icon{display:grid;place-items:center;flex-shrink:0;width:43px;height:49px;border-radius:9px;color:#9a7c41;background:#ece5d3}
+@media(max-width:640px){.saved-certificate{padding:14px 12px;gap:11px}.saved-certificate b{font-size:12px}.saved-certificate small{font-size:9px}.certificate-list-icon{width:35px;height:42px}.certificate-return{font-size:10px}}
