@@ -15,7 +15,7 @@
   "adaptationNotes": [
     "极速版太平老街末尾原稿错误引导杜甫江阁，已依其明确行走动线改为坡子街。",
     "城市版潮宗街末尾原稿强制引导省博，已改为城市版结营；深度版才引导博物院。",
-    "统一湖南省博物馆/湖南省博物院为湖南博物院；历史/公共文化介绍只作为剧情文化叙述。",
+    "统一湖南省博物馆/湖南省博物馆为湖南省博物馆；历史/公共文化介绍只作为剧情文化叙述。",
     "橘子洲原稿仅列红色金融初心任务与高收益风险主题，没有逐句台词；此章是围绕原稿主题的克制扩写。",
     "太平信用传说原稿仅写故事梗概，不虚构具体真实商号或历史凭据；引路人用概括性信用故事。",
     "保留终章影像撕裂与崩解演出，但由独立联系本人、核对资金要求等多维核验触发；不把微表情或眨眼视为可靠识别 AI 的方法。",
@@ -129,7 +129,7 @@
     },
     "museum": {
       "src": "/assets/novel/backgrounds/museum.png",
-      "description": "湖南博物院数字展厅，文物展示柜与绢帛纹理投影，庄重金青色，非具体文物错误复刻。",
+      "description": "湖南省博物馆数字展厅，文物展示柜与绢帛纹理投影，庄重金青色，非具体文物错误复刻。",
       "fallback": "/assets/maps/route-deep.png"
     },
     "cultural": {
@@ -697,7 +697,7 @@
         {
           "type": "dialogue",
           "speaker": "镜界系统",
-          "text": "当前行动模式：深度体验版。沿江主线之后，继续进入湖南博物院，追踪暗流的最终伪装。",
+          "text": "当前行动模式：深度体验版。沿江主线之后，继续进入湖南省博物馆，追踪暗流的最终伪装。",
           "cast": [
             {
               "id": "gx",
@@ -2594,7 +2594,7 @@
         {
           "type": "dialogue",
           "speaker": "镜界系统",
-          "text": "深度模式追踪更新：欺诈暗流的核心母体仍在逃逸，最后的异常坐标位于湖南博物院。",
+          "text": "深度模式追踪更新：欺诈暗流的核心母体仍在逃逸，最后的异常坐标位于湖南省博物馆。",
           "cast": [
             {
               "id": "owner",
@@ -2729,9 +2729,9 @@
           "source": "proposal",
           "sceneId": "museum-light-corridor",
           "background": "cultural",
-          "setting": "前往湖南博物院 · 文化流光",
+          "setting": "前往湖南省博物馆 · 文化流光",
           "music": "story",
-          "sceneTitle": "前往湖南博物院 · 文化流光",
+          "sceneTitle": "前往湖南省博物馆 · 文化流光",
           "id": "museum-beforeQuiz-01"
         },
         {
@@ -2749,7 +2749,7 @@
           "source": "proposal",
           "sceneId": "museum-light-corridor",
           "background": "cultural",
-          "setting": "前往湖南博物院 · 文化流光",
+          "setting": "前往湖南省博物馆 · 文化流光",
           "music": "story",
           "id": "museum-beforeQuiz-02"
         },
@@ -2768,7 +2768,7 @@
           "source": "proposal",
           "sceneId": "museum-light-corridor",
           "background": "cultural",
-          "setting": "前往湖南博物院 · 文化流光",
+          "setting": "前往湖南省博物馆 · 文化流光",
           "music": "story",
           "id": "museum-beforeQuiz-03"
         },
@@ -2781,7 +2781,7 @@
           "source": "proposal",
           "sceneId": "museum-light-corridor",
           "background": "cultural",
-          "setting": "前往湖南博物院 · 文化流光",
+          "setting": "前往湖南省博物馆 · 文化流光",
           "music": "story",
           "id": "museum-beforeQuiz-04"
         },
@@ -2800,7 +2800,7 @@
           "source": "proposal",
           "sceneId": "museum-light-corridor",
           "background": "cultural",
-          "setting": "前往湖南博物院 · 文化流光",
+          "setting": "前往湖南省博物馆 · 文化流光",
           "music": "story",
           "id": "museum-beforeQuiz-05"
         },
@@ -2819,7 +2819,7 @@
           "source": "proposal",
           "sceneId": "museum-light-corridor",
           "background": "cultural",
-          "setting": "前往湖南博物院 · 文化流光",
+          "setting": "前往湖南省博物馆 · 文化流光",
           "music": "story",
           "id": "museum-beforeQuiz-06"
         },
@@ -2833,10 +2833,10 @@
           "source": "proposal",
           "sceneId": "museum-call",
           "background": "museum",
-          "setting": "湖南博物院 · 紧急视频来电",
+          "setting": "湖南省博物馆 · 紧急视频来电",
           "music": "tension",
           "transition": "crossfade",
-          "sceneTitle": "湖南博物院 · 紧急视频来电",
+          "sceneTitle": "湖南省博物馆 · 紧急视频来电",
           "id": "museum-beforeQuiz-07"
         },
         {
@@ -2861,7 +2861,7 @@
           "source": "proposal",
           "sceneId": "museum-call",
           "background": "museum",
-          "setting": "湖南博物院 · 紧急视频来电",
+          "setting": "湖南省博物馆 · 紧急视频来电",
           "music": "tension",
           "id": "museum-beforeQuiz-08"
         },
@@ -2887,7 +2887,7 @@
           "source": "adapted",
           "sceneId": "museum-call",
           "background": "museum",
-          "setting": "湖南博物院 · 紧急视频来电",
+          "setting": "湖南省博物馆 · 紧急视频来电",
           "music": "tension",
           "id": "museum-beforeQuiz-09"
         },
@@ -2912,7 +2912,7 @@
           "source": "proposal",
           "sceneId": "museum-call",
           "background": "museum",
-          "setting": "湖南博物院 · 紧急视频来电",
+          "setting": "湖南省博物馆 · 紧急视频来电",
           "music": "tension",
           "id": "museum-beforeQuiz-10"
         },
@@ -2958,7 +2958,7 @@
           "source": "proposal",
           "sceneId": "museum-call",
           "background": "museum",
-          "setting": "湖南博物院 · 紧急视频来电",
+          "setting": "湖南省博物馆 · 紧急视频来电",
           "music": "tension",
           "id": "museum-beforeQuiz-11"
         },
@@ -2986,7 +2986,7 @@
           "source": "proposal",
           "sceneId": "museum-call",
           "background": "museum",
-          "setting": "湖南博物院 · 紧急视频来电",
+          "setting": "湖南省博物馆 · 紧急视频来电",
           "music": "tension",
           "id": "museum-beforeQuiz-12"
         },
@@ -3011,7 +3011,7 @@
           "source": "adapted",
           "sceneId": "museum-call",
           "background": "museum",
-          "setting": "湖南博物院 · 紧急视频来电",
+          "setting": "湖南省博物馆 · 紧急视频来电",
           "music": "tension",
           "id": "museum-beforeQuiz-13"
         },
@@ -3031,7 +3031,7 @@
           "cta": "开始情境挑战",
           "sceneId": "museum-call",
           "background": "museum",
-          "setting": "湖南博物院 · 紧急视频来电",
+          "setting": "湖南省博物馆 · 紧急视频来电",
           "music": "tension",
           "id": "museum-beforeQuiz-14"
         }
@@ -3059,10 +3059,10 @@
           "source": "adapted",
           "sceneId": "museum-mirror-broken",
           "background": "museum",
-          "setting": "湖南博物院 · 镜像破灭",
+          "setting": "湖南省博物馆 · 镜像破灭",
           "music": "finale",
           "transition": "crossfade",
-          "sceneTitle": "湖南博物院 · 镜像破灭",
+          "sceneTitle": "湖南省博物馆 · 镜像破灭",
           "id": "museum-afterPass-01"
         },
         {
@@ -3087,7 +3087,7 @@
           "source": "adapted",
           "sceneId": "museum-mirror-broken",
           "background": "museum",
-          "setting": "湖南博物院 · 镜像破灭",
+          "setting": "湖南省博物馆 · 镜像破灭",
           "music": "finale",
           "id": "museum-afterPass-02"
         },
@@ -3114,7 +3114,7 @@
           "source": "proposal",
           "sceneId": "museum-mirror-broken",
           "background": "museum",
-          "setting": "湖南博物院 · 镜像破灭",
+          "setting": "湖南省博物馆 · 镜像破灭",
           "music": "finale",
           "id": "museum-afterPass-03"
         },
@@ -3133,7 +3133,7 @@
           "source": "adapted",
           "sceneId": "museum-mirror-broken",
           "background": "museum",
-          "setting": "湖南博物院 · 镜像破灭",
+          "setting": "湖南省博物馆 · 镜像破灭",
           "music": "finale",
           "id": "museum-afterPass-04"
         },
@@ -3227,10 +3227,10 @@
           ],
           "sceneId": "museum-recheck",
           "background": "museum",
-          "setting": "湖南博物院 · 先暂停这通来电",
+          "setting": "湖南省博物馆 · 先暂停这通来电",
           "music": "story",
           "transition": "crossfade",
-          "sceneTitle": "湖南博物院 · 先暂停这通来电",
+          "sceneTitle": "湖南省博物馆 · 先暂停这通来电",
           "id": "museum-afterFail-01"
         },
         {
@@ -3247,7 +3247,7 @@
           ],
           "sceneId": "museum-recheck",
           "background": "museum",
-          "setting": "湖南博物院 · 先暂停这通来电",
+          "setting": "湖南省博物馆 · 先暂停这通来电",
           "music": "story",
           "id": "museum-afterFail-02"
         },
@@ -3266,7 +3266,7 @@
           "cta": "重新检查风险线索",
           "sceneId": "museum-recheck",
           "background": "museum",
-          "setting": "湖南博物院 · 先暂停这通来电",
+          "setting": "湖南省博物馆 · 先暂停这通来电",
           "music": "story",
           "id": "museum-afterFail-03"
         }
